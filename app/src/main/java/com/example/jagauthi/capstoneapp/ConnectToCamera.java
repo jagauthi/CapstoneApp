@@ -6,26 +6,24 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
-import org.ros.android.view.VirtualJoystickView;
-import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
 
 import java.io.IOException;
 
-public class MainActivity extends RosAppActivity {
+public class ConnectToCamera extends RosAppActivity {
 
-    private VirtualJoystickView virtualJoystickView;
+    sensor_msgs.Image image;
+
     private Messenger messenger;
+    private ImageListener listener;
 
-    private EditText editText;
-    private Button messengerButton;
+    private Button connectButton;
 
-    public MainActivity() {
+    public ConnectToCamera() {
         super("android teleop", "android teleop");
     }
 
@@ -35,25 +33,28 @@ public class MainActivity extends RosAppActivity {
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.main);
         super.onCreate(savedInstanceState);
-
-        virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
-
-        editText = (EditText) findViewById(R.id.messenger_text);
-        messenger = new Messenger(editText.getContext(), "appMessages");
-        messengerButton = (Button)findViewById(R.id.messenger_button);
-        messengerButton.setOnClickListener(new View.OnClickListener() {
+    
+        connectButton = (Button)findViewById(R.id.connect_button);
+        connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendMessage();
             }
         });
+        messenger = new Messenger(connectButton.getContext(), "CameraConnect");
+        listener = new ImageListener(connectButton.getContext(), "GetImage", this);
     }
 
     public void sendMessage()
     {
-        messenger.setMessage(editText.getText().toString());
+        messenger.setMessage("I want to connect");
         messenger.setSending(true);
-        editText.setText("");
+    }
+
+    public void doSomethingWithImage(sensor_msgs.Image image)
+    {
+        this.image = image;
+        System.out.println("Doing something");
     }
 
     @Override
@@ -67,14 +68,8 @@ public class MainActivity extends RosAppActivity {
             socket.close();
             NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(local_network_address.getHostAddress(), getMasterUri());
 
-            String joyTopic = "cmd_vel";
-
-            NameResolver appNameSpace = getMasterNameSpace();
-            joyTopic = appNameSpace.resolve(joyTopic).toString();
-            virtualJoystickView.setTopicName(joyTopic);
-
             nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/messenger"));
-            nodeMainExecutor.execute(virtualJoystickView, nodeConfiguration.setNodeName("android/virtual_joystick"));
+            nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
         }
         catch (IOException e) {
             Log.d("tag", "Oh nooooooo");

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.RelativeLayout;
+
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
@@ -11,13 +12,20 @@ import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
 
-public class Listener extends RelativeLayout implements NodeMain {
+public class ImageListener extends RelativeLayout implements MessageListener<sensor_msgs.Image>, NodeMain {
     private String topicName;
     Subscriber subscriber;
+    sensor_msgs.Image image;
+    ConnectToCamera main;
 
-    public Listener(Context context) {
+    public ImageListener(Context context, String topicName, ConnectToCamera main) {
         super(context);
-        this.topicName = "appMessages";
+        this.topicName = topicName;
+        this.main = main;
+    }
+
+    public void onNewMessage(sensor_msgs.Image message) {
+
     }
 
     public boolean onTouchEvent(MotionEvent event) {
@@ -29,11 +37,12 @@ public class Listener extends RelativeLayout implements NodeMain {
     }
 
     public void onStart(ConnectedNode connectedNode) {
-        subscriber = connectedNode.newSubscriber(this.topicName, "std_msgs/String");
+        subscriber = connectedNode.newSubscriber(this.topicName, "sensor_msgs/Image");
         subscriber.addMessageListener(new MessageListener() {
             @Override
             public void onNewMessage(Object o) {
-                Log.d("DebuggingTag", "Getting a message");
+                image = (sensor_msgs.Image)o;
+                main.doSomethingWithImage(image);
             }
         });
     }

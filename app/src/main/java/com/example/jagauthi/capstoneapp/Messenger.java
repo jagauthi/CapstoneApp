@@ -19,9 +19,9 @@ public class Messenger extends RelativeLayout implements NodeMain {
     boolean sending = false;
     String message;
 
-    public Messenger(Context context) {
+    public Messenger(Context context, String topicName) {
         super(context);
-        this.topicName = "appMessages";
+        this.topicName = topicName;
     }
 
     public boolean onTouchEvent(MotionEvent event) {

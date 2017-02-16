@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/main_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ff404040"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/side_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:layout_margin="10dip"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/connect_button"
+                android:layout_width="200dip"
+                android:layout_height="80dip"
+                android:onClick="asdf"
+                android:background="#44b"
+                android:layout_marginTop="10dip"
+                android:text="Connect!"
+                android:textSize="30dip" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
