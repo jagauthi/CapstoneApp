@@ -28,6 +28,8 @@
             </intent-filter>
         </service>
 
+        <activity android:name=".StartDraw"></activity>
+
     </application>
 
 </manifest>
