@@ -5,19 +5,13 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+
     <LinearLayout
-        android:id="@+id/top_view"
+        android:id="@+id/main_layout"
         android:layout_width="fill_parent"
-        android:layout_height="50dip"
+        android:layout_height="fill_parent"
         android:background="#ff404040"
         android:orientation="vertical" >
-
-        <Button
-            android:id="@+id/back_button"
-            android:layout_width="wrap_content"
-            android:layout_height="50dip"
-            android:onClick="back"
-            android:text="Back" />
 
         <LinearLayout
             android:id="@+id/top_bar"
@@ -26,47 +20,33 @@
             android:background="#ff404040"
             android:gravity="right"
             android:orientation="horizontal" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/main_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
 
         <LinearLayout
             android:id="@+id/side_layout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:layout_margin="10dip"
             android:orientation="vertical" >
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/messenger_text"
+                android:layout_width="350dip"
+                android:layout_height="100dip"
+                android:background="#FFF"
+                android:textColor="#000"
+                android:hint="Enter text" />
 
-                <EditText
-                    android:id="@+id/messenger_text"
-                    android:layout_width="300dip"
-                    android:layout_height="50dip"
-                    android:hint="Enter text" />
-
-                <Button
-                    android:id="@+id/messenger_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dip"
-                    android:onClick="asdf"
-                    android:text="Send!"
-                    android:layout_toRightOf="@+id/messenger_text" />
-
-                <Button
-                    android:id="@+id/listener_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dip"
-                    android:onClick="asdf"
-                    android:text="Start Listener"
-                    android:layout_below="@+id/messenger_text" />
-            </RelativeLayout>
+            <Button
+                android:id="@+id/messenger_button"
+                android:layout_width="150dip"
+                android:layout_height="80dip"
+                android:onClick="asdf"
+                android:background="#44b"
+                android:layout_marginTop="10dip"
+                android:text="Send!"
+                android:textSize="30dip"
+                android:layout_toRightOf="@+id/messenger_text" />
 
             <org.ros.android.view.VirtualJoystickView
                 android:id="@+id/virtual_joystick"
@@ -75,15 +55,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="4"
                 android:adjustViewBounds="true" >
-
-
             </org.ros.android.view.VirtualJoystickView>
-
-            <View
-                android:layout_width="0dip"
-                android:layout_height="0dip"
-                android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
-
 </LinearLayout>

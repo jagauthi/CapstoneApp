@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
@@ -17,13 +18,12 @@ import org.ros.node.NodeMainExecutor;
 import java.io.IOException;
 
 public class MainActivity extends RosAppActivity {
+
     private VirtualJoystickView virtualJoystickView;
-
     private Messenger messenger;
-    private Listener listener;
 
+    private EditText editText;
     private Button messengerButton;
-    private Button backButton;
 
     public MainActivity() {
         super("android teleop", "android teleop");
@@ -38,9 +38,8 @@ public class MainActivity extends RosAppActivity {
 
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
 
-        messenger = new Messenger(virtualJoystickView.getContext());
-        listener = new Listener(messenger.getContext());
-
+        editText = (EditText) findViewById(R.id.messenger_text);
+        messenger = new Messenger(editText.getContext());
         messengerButton = (Button)findViewById(R.id.messenger_button);
         messengerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,19 +47,13 @@ public class MainActivity extends RosAppActivity {
                 sendMessage();
             }
         });
-
-        backButton = (Button) findViewById(R.id.back_button);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
     }
 
     public void sendMessage()
     {
         messenger.setSending(true);
+        messenger.setMessage(editText.getText().toString());
+        editText.setText("");
     }
 
     @Override
@@ -81,7 +74,6 @@ public class MainActivity extends RosAppActivity {
             virtualJoystickView.setTopicName(joyTopic);
 
             nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/messenger"));
-            nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/listener"));
             nodeMainExecutor.execute(virtualJoystickView, nodeConfiguration.setNodeName("android/virtual_joystick"));
         }
         catch (IOException e) {
