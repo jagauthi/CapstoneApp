@@ -86,6 +86,12 @@ public class DrawView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
+        /* I think this will work, but I don't want to call it everytime I call onDraw.....
+        ////////////////////////////////////////
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        Bitmap mutableBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
+        Canvas canvas = new Canvas(mutableBitmap); // now it should work ok
+        */
         for(Line line : lines)
         {
             canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), paint);
