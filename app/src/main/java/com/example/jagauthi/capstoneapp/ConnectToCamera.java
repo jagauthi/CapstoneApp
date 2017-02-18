@@ -33,7 +33,7 @@ public class ConnectToCamera extends RosAppActivity {
         setDashboardResource(R.id.top_bar);
         setMainWindowResource(R.layout.main);
         super.onCreate(savedInstanceState);
-    
+
         connectButton = (Button)findViewById(R.id.connect_button);
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
