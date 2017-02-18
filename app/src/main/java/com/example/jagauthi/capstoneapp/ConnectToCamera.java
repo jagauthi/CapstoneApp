@@ -7,6 +7,8 @@ import android.graphics.Matrix;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +22,7 @@ import android.widget.Toast;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
@@ -64,6 +67,53 @@ public class ConnectToCamera extends RosAppActivity {
 
     static final int SocketServerPORT = 60000;
 
+    Runnable updateImage = new Runnable() {
+        @Override
+        public void run() {
+//            Log.v("Updating", "Updating");
+            if(imageByteArray != null) {
+                updateImageByte = false;
+//                Log.v("GoToNext", Integer.toString(imageByteArray.length));
+
+                final int w = 640;
+                final int h = 480;
+                final int n = w * h;
+                int red, green, blue, pixelARGB;
+                final int [] buf = new int[n*3];
+                for (int y = 0; y < h; y++) {
+                    final int yw = y * w;
+                    for (int x = 0; x < w; x++) {
+                        int i = yw + x;
+                        // Calculate 'pixelARGB' here.
+                        red = imageByteArray[i++] & 0xFF;
+                        green = imageByteArray[i++] & 0xFF;
+                        blue = imageByteArray[i++]& 0xFF;
+                        pixelARGB = 0xFF000000 | (red << 16)| (green << 8) | blue;
+                        buf[i] = pixelARGB;
+                    }
+                }
+//            InputStream in = new ByteArrayInputStream(imageByteArray);
+//            int[] pixelData = new int[imageByteArray.length];
+//            for(int i = 0;i < pixelData.length;i++){
+//                pixelData[i] = imageByteArray[i];
+//            }
+
+//                Bitmap image = Bitmap.createBitmap(pixelData, 640, 480, Bitmap.Config.ARGB_8888);
+                Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.ARGB_8888);
+//            Bitmap bmp = Bitmap.createBitmap(640, 480, Bitmap.Config.ARGB_8888);
+//            ByteBuffer buffer = ByteBuffer.wrap(imageByteArray, 0, imageByteArray.length-1);
+//            bmp.copyPixelsFromBuffer(buffer);
+//                Bitmap bmp = BitmapFactory.
+//            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+//            imageView.setImageAlpha(0);
+//            imageView.setRotation(imageView.getRotation() + 90);
+                imageView.setImageBitmap(image);
+                updateImageByte = true;
+                imageView.postDelayed(updateImage, 100);
+            }
+        }
+    };
+
     public ConnectToCamera() {
         super("android teleop", "android teleop");
         System.out.println("Test");
@@ -99,28 +149,10 @@ public class ConnectToCamera extends RosAppActivity {
         listener = new ImageListener(connectButton.getContext(), "getImage", this);
 
         imageView = (ImageView) findViewById(R.id.image);
-
-//        final long period = 1000;
-//        new Timer().schedule(new TimerTask() {
-//            @Override
-//            public void run() {
-                displayImage();
-                // do your task here
-//            }
-//        }, 0, period);
-
-
-//        while(true){
-//        while(doThing){
-//            Log.v("ConnectToCamera", "Doing the thing");
-//            if(prevImageByteArray != imageByteArray){
-//                prevImageByteArray = imageByteArray;
-//                ImageView imageView = (ImageView) findViewById(R.id.image);
-//                Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
-//                imageView.setImageBitmap(bMap);
-//
-//            }
-//        }
+        displayImage();
+        if(!imageView.postDelayed(updateImage, 100)){
+            Log.v("Nope", "Nope");
+        }
 
     }
 
@@ -282,7 +314,7 @@ public class ConnectToCamera extends RosAppActivity {
 //            bmp.copyPixelsFromBuffer(buffer);
 //            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
 //            imageView.setImageAlpha(0);
-            imageView.setRotation(imageView.getRotation() + 90);
+//            imageView.setRotation(imageView.getRotation() + 90);
             imageView.setImageBitmap(image);
             updateImageByte = true;
         }
@@ -305,8 +337,41 @@ public class ConnectToCamera extends RosAppActivity {
 //            prevImageByteArray = imageByteArray;
 //            ImageView imageView = (ImageView) findViewById(R.id.image);
         if(imageByteArray != null) {
-            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
-            imageView.setImageBitmap(bMap);
+            updateImageByte = false;
+            Log.v("GoToNext", Integer.toString(imageByteArray.length));
+
+            final int w = 640;
+            final int h = 480;
+            final int n = w * h;
+            int red, green, blue, pixelARGB;
+            final int [] buf = new int[n*3];
+            for (int y = 0; y < h; y++) {
+                final int yw = y * w;
+                for (int x = 0; x < w; x++) {
+                    int i = yw + x;
+                    // Calculate 'pixelARGB' here.
+                    red = imageByteArray[i++] & 0xFF;
+                    green = imageByteArray[i++] & 0xFF;
+                    blue = imageByteArray[i++]& 0xFF;
+                    pixelARGB = 0xFF000000 | (red << 16)| (green << 8) | blue;
+                    buf[i] = pixelARGB;
+                }
+            }
+//            InputStream in = new ByteArrayInputStream(imageByteArray);
+//            int[] pixelData = new int[imageByteArray.length];
+//            for(int i = 0;i < pixelData.length;i++){
+//                pixelData[i] = imageByteArray[i];
+//            }
+
+            Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.ARGB_8888);
+//            Bitmap bmp = Bitmap.createBitmap(640, 480, Bitmap.Config.ARGB_8888);
+//            ByteBuffer buffer = ByteBuffer.wrap(imageByteArray, 0, imageByteArray.length-1);
+//            bmp.copyPixelsFromBuffer(buffer);
+//            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+//            imageView.setImageAlpha(0);
+//            imageView.setRotation(imageView.getRotation() + 90);
+            imageView.setImageBitmap(image);
+            updateImageByte = true;
         }
 //        }
     }
