@@ -1,8 +1,11 @@
 package com.example.jagauthi.capstoneapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import org.ros.message.MessageListener;
@@ -39,6 +42,10 @@ public class ImageListener extends RelativeLayout implements NodeMain {
             public void onNewMessage(Object o) {
                 image = (sensor_msgs.Image)o;
                 main.doSomethingWithImage(image);
+//                ImageView imageView = (ImageView) findViewById(R.id.image);
+//                ImageView imageView = main.getImageView();
+//                Bitmap bMap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
+//                imageView.setImageBitmap(bMap);
             }
         });
     }

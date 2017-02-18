@@ -1,13 +1,20 @@
 package com.example.jagauthi.capstoneapp;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +26,8 @@ import org.ros.node.NodeMainExecutor;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -28,10 +37,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ConnectToCamera extends RosAppActivity {
 
     sensor_msgs.Image image;
+
+    ImageView imageView;
 
     private Messenger messenger;
     private ImageListener listener;
@@ -41,6 +56,11 @@ public class ConnectToCamera extends RosAppActivity {
     EditText editTextAddress;
     Button buttonConnect;
     TextView textPort;
+
+    byte[] imageByteArray = new byte[921600];
+    byte[] prevImageByteArray;
+
+    boolean updateImageByte = true;
 
     static final int SocketServerPORT = 60000;
 
@@ -67,7 +87,7 @@ public class ConnectToCamera extends RosAppActivity {
          //   }});
 
         //////////////////////////////////////////////////////////////////
-    
+
         connectButton = (Button)findViewById(R.id.connect_button);
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +97,31 @@ public class ConnectToCamera extends RosAppActivity {
         });
         messenger = new Messenger(connectButton.getContext(), "cameraConnect");
         listener = new ImageListener(connectButton.getContext(), "getImage", this);
+
+        imageView = (ImageView) findViewById(R.id.image);
+
+//        final long period = 1000;
+//        new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+                displayImage();
+                // do your task here
+//            }
+//        }, 0, period);
+
+
+//        while(true){
+//        while(doThing){
+//            Log.v("ConnectToCamera", "Doing the thing");
+//            if(prevImageByteArray != imageByteArray){
+//                prevImageByteArray = imageByteArray;
+//                ImageView imageView = (ImageView) findViewById(R.id.image);
+//                Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+//                imageView.setImageBitmap(bMap);
+//
+//            }
+//        }
+
     }
 
     public void sendMessage()
@@ -90,9 +135,20 @@ public class ConnectToCamera extends RosAppActivity {
         this.image = image;
         ChannelBuffer buffer = this.image.getData();
         byte[] byteArray = buffer.array();
-        Log.d("Tagggggggg", "Here's the byte array's first element: " + byteArray[0]);
+        Log.d("Tagggggggg", "Here's the byte array's first element: " + byteArray[41]);
+        Log.d("Tagggggggg", "Original array size: " + byteArray.length);
+        if(updateImageByte) {
+            this.imageByteArray = Arrays.copyOfRange(byteArray, byteArray.length-921600, byteArray.length);
+            Log.v("Image byte array size", Integer.toString(imageByteArray.length));
+        }
+//        return byteArray;
+//        ImageView imageView = (ImageView) findViewById(R.id.image);
+//        Bitmap bMap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+//        imageView.setImageBitmap(bMap);
     }
-
+    public ImageView getImageView(){
+        return (ImageView) findViewById(R.id.image);
+    }
     @Override
     protected void init(NodeMainExecutor nodeMainExecutor) {
 
@@ -185,5 +241,73 @@ public class ConnectToCamera extends RosAppActivity {
                 }
             }
         }
+    }
+
+    public void GoToNext(View v){
+//        Intent intent = new Intent(this, LayoutTestingActivity.class);
+//        startActivity(intent);
+//        for(int i = 0;i< imageByteArray.length;i++){
+//            if(imageByteArray[i] < -128 ||)
+//        }
+        if(imageByteArray != null) {
+            updateImageByte = false;
+            Log.v("GoToNext", Integer.toString(imageByteArray.length));
+
+            final int w = 640;
+            final int h = 480;
+            final int n = w * h;
+            int red, green, blue, pixelARGB;
+            final int [] buf = new int[n*3];
+            for (int y = 0; y < h; y++) {
+                final int yw = y * w;
+                for (int x = 0; x < w; x++) {
+                    int i = yw + x;
+                    // Calculate 'pixelARGB' here.
+                    red = imageByteArray[i++] & 0xFF;
+                    green = imageByteArray[i++] & 0xFF;
+                    blue = imageByteArray[i++]& 0xFF;
+                    pixelARGB = 0xFF000000 | (red << 16)| (green << 8) | blue;
+                    buf[i] = pixelARGB;
+                }
+            }
+//            InputStream in = new ByteArrayInputStream(imageByteArray);
+//            int[] pixelData = new int[imageByteArray.length];
+//            for(int i = 0;i < pixelData.length;i++){
+//                pixelData[i] = imageByteArray[i];
+//            }
+
+            Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.ARGB_8888);
+//            Bitmap bmp = Bitmap.createBitmap(640, 480, Bitmap.Config.ARGB_8888);
+//            ByteBuffer buffer = ByteBuffer.wrap(imageByteArray, 0, imageByteArray.length-1);
+//            bmp.copyPixelsFromBuffer(buffer);
+//            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+//            imageView.setImageAlpha(0);
+            imageView.setRotation(imageView.getRotation() + 90);
+            imageView.setImageBitmap(image);
+            updateImageByte = true;
+        }
+
+
+        //test code
+//        Bitmap bitmap = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.a1);
+//        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+//        byte[] bytes = stream.toByteArray();
+//
+//        Bitmap bMap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//        imageView.setImageBitmap(bMap);
+
+
+    }
+
+    public void displayImage(){
+//        if(prevImageByteArray != imageByteArray){
+//            prevImageByteArray = imageByteArray;
+//            ImageView imageView = (ImageView) findViewById(R.id.image);
+        if(imageByteArray != null) {
+            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
+            imageView.setImageBitmap(bMap);
+        }
+//        }
     }
 }
