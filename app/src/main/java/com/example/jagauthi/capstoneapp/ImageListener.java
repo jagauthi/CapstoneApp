@@ -12,7 +12,7 @@ import org.ros.node.Node;
 import org.ros.node.NodeMain;
 import org.ros.node.topic.Subscriber;
 
-public class ImageListener extends RelativeLayout implements MessageListener<sensor_msgs.Image>, NodeMain {
+public class ImageListener extends RelativeLayout implements NodeMain {
     private String topicName;
     Subscriber subscriber;
     sensor_msgs.Image image;
@@ -22,10 +22,6 @@ public class ImageListener extends RelativeLayout implements MessageListener<sen
         super(context);
         this.topicName = topicName;
         this.main = main;
-    }
-
-    public void onNewMessage(sensor_msgs.Image message) {
-
     }
 
     public boolean onTouchEvent(MotionEvent event) {

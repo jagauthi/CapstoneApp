@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
 
@@ -54,6 +55,8 @@ public class ConnectToCamera extends RosAppActivity {
     public void doSomethingWithImage(sensor_msgs.Image image)
     {
         this.image = image;
+        ChannelBuffer buffer = this.image.getData();
+        byte[] byteArray = buffer.array();
         System.out.println("Doing something");
     }
 
