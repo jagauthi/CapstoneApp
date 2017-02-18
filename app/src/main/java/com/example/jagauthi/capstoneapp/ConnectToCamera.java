@@ -26,6 +26,7 @@ public class ConnectToCamera extends RosAppActivity {
 
     public ConnectToCamera() {
         super("android teleop", "android teleop");
+        System.out.println("Test");
     }
 
     @SuppressWarnings("unchecked")
