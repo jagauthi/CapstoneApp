@@ -33,7 +33,7 @@ public class ConnectToCamera extends RosAppActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setDashboardResource(R.id.top_bar);
-        setMainWindowResource(R.layout.main);
+        setMainWindowResource(R.layout.activity_connect_to_camera);
         super.onCreate(savedInstanceState);
     
         connectButton = (Button)findViewById(R.id.connect_button);
@@ -43,8 +43,8 @@ public class ConnectToCamera extends RosAppActivity {
                 sendMessage();
             }
         });
-        messenger = new Messenger(connectButton.getContext(), "CameraConnect");
-        listener = new ImageListener(connectButton.getContext(), "GetImage", this);
+        messenger = new Messenger(connectButton.getContext(), "cameraConnect");
+        listener = new ImageListener(connectButton.getContext(), "getImage", this);
     }
 
     public void sendMessage()
