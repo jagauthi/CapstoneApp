@@ -24,6 +24,8 @@ import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
 import org.apache.commons.lang.time.StopWatch;
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.ros.android.view.VirtualJoystickView;
+import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
 import org.ros.node.NodeMainExecutor;
 
@@ -56,21 +58,16 @@ public class ConnectToCamera extends RosAppActivity {
 
     private Button connectButton;
 
-    EditText editTextAddress;
-    Button buttonConnect;
-    TextView textPort;
+    private VirtualJoystickView virtualJoystickView;
 
     byte[] imageByteArray = new byte[921600];
     byte[] prevImageByteArray;
 
     boolean updateImageByte = true;
 
-    static final int SocketServerPORT = 60000;
-
     Runnable updateImage = new Runnable() {
         @Override
         public void run() {
-//            Log.v("Updating", "Updating");
             if(imageByteArray != null) {
                 updateImageByte = false;
 //                Log.v("GoToNext", Integer.toString(imageByteArray.length));
@@ -126,18 +123,7 @@ public class ConnectToCamera extends RosAppActivity {
         setMainWindowResource(R.layout.activity_connect_to_camera);
         super.onCreate(savedInstanceState);
 
-        ////////////////////////////////////////////////////////////////
-        //textPort.setText("port: " + SocketServerPORT);
-       // buttonConnect = (Button) findViewById(R.id.connect);
-        //buttonConnect.setOnClickListener(new View.OnClickListener(){
-        //    @Override
-         //   public void onClick(View v) {
-         //       ClientRxThread clientRxThread = new ClientRxThread("192.168.1.104", SocketServerPORT);
-         //       clientRxThread.start();
-         //   }});
-
-        //////////////////////////////////////////////////////////////////
-
+        virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
         connectButton = (Button)findViewById(R.id.connect_button);
         connectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,8 +178,15 @@ public class ConnectToCamera extends RosAppActivity {
             socket.close();
             NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(local_network_address.getHostAddress(), getMasterUri());
 
+            String joyTopic = remaps.get("cmd_vel");
+
+            NameResolver appNameSpace = getMasterNameSpace();
+            joyTopic = appNameSpace.resolve(joyTopic).toString();
+            virtualJoystickView.setTopicName(joyTopic);
+
             nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/messenger"));
             nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
+            nodeMainExecutor.execute(virtualJoystickView, nodeConfiguration.setNodeName("android/virtual_joystick"));
         }
         catch (IOException e) {
             Log.d("tag", "Oh nooooooo");

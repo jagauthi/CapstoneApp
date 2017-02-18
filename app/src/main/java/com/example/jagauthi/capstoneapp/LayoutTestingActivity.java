@@ -76,7 +76,7 @@ public class LayoutTestingActivity extends AppCompatActivity {
 
         final List<Drawable> images = new ArrayList<>();
 
-        images.add(getResources().getDrawable(R.drawable.a1));
+      /*  images.add(getResources().getDrawable(R.drawable.a1));
         images.add(getResources().getDrawable(R.drawable.a2));
         images.add(getResources().getDrawable(R.drawable.a3));
         images.add(getResources().getDrawable(R.drawable.b1));
@@ -84,7 +84,7 @@ public class LayoutTestingActivity extends AppCompatActivity {
         images.add(getResources().getDrawable(R.drawable.b3));
         images.add(getResources().getDrawable(R.drawable.b4));
         images.add(getResources().getDrawable(R.drawable.beautifulart));
-
+        */
 
 
         final Handler handler = new Handler();
