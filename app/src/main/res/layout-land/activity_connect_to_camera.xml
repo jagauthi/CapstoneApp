@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/main_view"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
+      android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/main_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ff404040"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/GoToNextButton"
+            android:layout_height="50dip"
+            android:layout_width="80dip"
+            android:textSize="15dip"
+            android:onClick="GoToNext"
+            android:background="#44b"
+            android:text="Connect"
+            android:layout_margin="10dip"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/image"
+            android:scaleType="fitCenter"
+            android:layout_margin="20dip"
+            android:layout_toLeftOf="@+id/virtual_joystick"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+        <org.ros.android.view.VirtualJoystickView
+            android:id="@+id/virtual_joystick"
+            android:layout_width="150dip"
+            android:layout_height="150dip"
+            android:layout_gravity="center"
+            android:layout_weight="4"
+            android:adjustViewBounds="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="40dp"
+            android:layout_alignBottom="@+id/image"
+            android:layout_alignRight="@+id/GoToNextButton"
+            android:layout_alignEnd="@+id/GoToNextButton">
+        </org.ros.android.view.VirtualJoystickView>
+
+
+    </RelativeLayout>
+</LinearLayout>

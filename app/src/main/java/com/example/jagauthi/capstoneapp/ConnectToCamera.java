@@ -61,7 +61,6 @@ public class ConnectToCamera extends RosAppActivity {
     private VirtualJoystickView virtualJoystickView;
 
     byte[] imageByteArray = new byte[921600];
-    byte[] prevImageByteArray;
 
     boolean updateImageByte = true;
 
@@ -70,7 +69,6 @@ public class ConnectToCamera extends RosAppActivity {
         public void run() {
             if(imageByteArray != null) {
                 updateImageByte = false;
-//                Log.v("GoToNext", Integer.toString(imageByteArray.length));
 
                 final int w = 640;
                 final int h = 480;
@@ -100,10 +98,9 @@ public class ConnectToCamera extends RosAppActivity {
 //            Bitmap bmp = Bitmap.createBitmap(640, 480, Bitmap.Config.ARGB_8888);
 //            ByteBuffer buffer = ByteBuffer.wrap(imageByteArray, 0, imageByteArray.length-1);
 //            bmp.copyPixelsFromBuffer(buffer);
-//                Bitmap bmp = BitmapFactory.
+//            Bitmap bmp = BitmapFactory.
 //            Bitmap bMap = BitmapFactory.decodeByteArray(imageByteArray, 0, imageByteArray.length);
 //            imageView.setImageAlpha(0);
-//            imageView.setRotation(imageView.getRotation() + 90);
                 imageView.setImageBitmap(image);
                 updateImageByte = true;
                 imageView.postDelayed(updateImage, 100);
@@ -124,15 +121,15 @@ public class ConnectToCamera extends RosAppActivity {
         super.onCreate(savedInstanceState);
 
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
-        connectButton = (Button)findViewById(R.id.connect_button);
-        connectButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                sendMessage();
-            }
-        });
-        messenger = new Messenger(connectButton.getContext(), "cameraConnect");
-        listener = new ImageListener(connectButton.getContext(), "getImage", this);
+        //connectButton = (Button)findViewById(R.id.connect_button);
+        //connectButton.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        sendMessage();
+        //    }
+        //});
+        messenger = new Messenger(virtualJoystickView.getContext(), "cameraConnect");
+        listener = new ImageListener(virtualJoystickView.getContext(), "getImage", this);
 
         imageView = (ImageView) findViewById(R.id.image);
         displayImage();
@@ -211,69 +208,9 @@ public class ConnectToCamera extends RosAppActivity {
         return true;
     }
 
-    private class ClientRxThread extends Thread {
-        String dstAddress;
-        int dstPort;
 
-        ClientRxThread(String address, int port) {
-            dstAddress = address;
-            dstPort = port;
-        }
-
-        @Override
-        public void run() {
-            Socket socket = null;
-            try {
-                socket = new Socket(dstAddress, dstPort);
-                File file = new File(Environment.getExternalStorageDirectory(), "test.txt");
-
-                byte[] bytes = new byte[1024];
-                InputStream is = socket.getInputStream();
-                FileOutputStream fos = new FileOutputStream(file);
-                BufferedOutputStream bos = new BufferedOutputStream(fos);
-                int bytesRead = is.read(bytes, 0, bytes.length);
-                bos.write(bytes, 0, bytesRead);
-                bos.close();
-                socket.close();
-                Log.d("tag", "" + bytes[0]);
-
-                ConnectToCamera.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ConnectToCamera.this, "Finished", Toast.LENGTH_LONG).show();
-                    }});
-
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-
-                final String eMsg = "Something wrong: " + e.getMessage();
-                ConnectToCamera.this.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(ConnectToCamera.this, eMsg, Toast.LENGTH_LONG).show();
-                    }});
-
-            }
-            finally {
-                if(socket != null){
-                    try {
-                        socket.close();
-                    }
-                    catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
 
     public void GoToNext(View v){
-//        Intent intent = new Intent(this, LayoutTestingActivity.class);
-//        startActivity(intent);
-//        for(int i = 0;i< imageByteArray.length;i++){
-//            if(imageByteArray[i] < -128 ||)
-//        }
         if(imageByteArray != null) {
             updateImageByte = false;
             Log.v("GoToNext", Integer.toString(imageByteArray.length));
