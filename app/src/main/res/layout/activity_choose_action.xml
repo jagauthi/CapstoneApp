@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_choose_action"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#ff404040"
+    tools:context="com.example.jagauthi.capstoneapp.ChooseAction">
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#ff404040"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/robot_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#ff404040"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/rel1"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ff404040"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/RobotName"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_toLeftOf="@+id/ConnectToRobot"
+                    android:layout_alignTop="@+id/ConnectToRobot"
+                    android:layout_alignBottom="@+id/ConnectToRobot"
+                    android:background="#fff"
+                    android:hint="Robot name"
+                    />
+
+                <Button
+                    android:id="@+id/ConnectToRobot"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="10dp"
+                    android:background="#44b"
+                    android:text="RobotConnect"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/camera_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#ff404040"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:id="@+id/rel2"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="#ff404040"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/CameraName"
+                    android:layout_height="wrap_content"
+                    android:layout_width="fill_parent"
+                    android:layout_toLeftOf="@+id/ConnectToCamera"
+                    android:layout_alignTop="@+id/ConnectToCamera"
+                    android:layout_alignBottom="@+id/ConnectToCamera"
+                    android:background="#fff"
+                    android:hint="Camera name"
+                    />
+
+                <Button
+                    android:id="@+id/ConnectToCamera"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginLeft="8dp"
+                    android:background="#44b"
+                    android:text="CameraConnect"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
