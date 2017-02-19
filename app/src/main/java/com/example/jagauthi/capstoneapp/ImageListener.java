@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
+
 import org.ros.message.MessageListener;
 import org.ros.namespace.GraphName;
 import org.ros.node.ConnectedNode;
@@ -19,9 +21,9 @@ public class ImageListener extends RelativeLayout implements NodeMain {
     private String topicName;
     Subscriber subscriber;
     sensor_msgs.Image image;
-    ConnectToCamera main;
+    RosAppActivity main;
 
-    public ImageListener(Context context, String topicName, ConnectToCamera main) {
+    public ImageListener(Context context, String topicName, RosAppActivity main) {
         super(context);
         this.topicName = topicName;
         this.main = main;
@@ -41,11 +43,14 @@ public class ImageListener extends RelativeLayout implements NodeMain {
             @Override
             public void onNewMessage(Object o) {
                 image = (sensor_msgs.Image)o;
-                main.doSomethingWithImage(image);
-//                ImageView imageView = (ImageView) findViewById(R.id.image);
-//                ImageView imageView = main.getImageView();
-//                Bitmap bMap = BitmapFactory.decodeByteArray(byteImage, 0, byteImage.length);
-//                imageView.setImageBitmap(bMap);
+                if(main.getClass() == ConnectToRobot.class) {
+                    ConnectToRobot connector = (ConnectToRobot)main;
+                    connector.doSomethingWithImage(image);
+                }
+                else if(main.getClass() == ConnectToCamera.class) {
+                    ConnectToCamera connector = (ConnectToCamera)main;
+                    connector.doSomethingWithImage(image);
+                }
             }
         });
     }

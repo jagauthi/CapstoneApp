@@ -41,7 +41,7 @@ public class DrawView extends View {
 
     private void init(Context context) {
         defaultLine = new Line(0, 1000, 200, 1000, 0.0);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.BLUE);
         paint.setStrokeWidth(30f);
 
         lines = new ArrayList<Line>();

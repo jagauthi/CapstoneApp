@@ -15,24 +15,27 @@
         tools:replace="android:icon">
         <activity android:name=".StartDraw" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".ConnectToCamera"/>
+        <activity android:name=".ConnectToRobot"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".ChooseAction"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="org.ros.android.MasterChooser" />
+
         <service android:name="org.ros.android.NodeMainExecutorService">
             <intent-filter>
                 <action android:name="org.ros.android.NodeMainExecutorService" />
             </intent-filter>
         </service>
-        <activity
-            android:name=".ConnectToCamera"
-            android:screenOrientation="landscape">
-        </activity>
+
+
     </application>
 
 </manifest>

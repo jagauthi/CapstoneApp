@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
@@ -19,7 +18,7 @@ import org.ros.node.NodeMainExecutor;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class ConnectToCamera extends RosAppActivity {
+public class ConnectToRobot extends RosAppActivity {
 
     sensor_msgs.Image image;
 
@@ -27,6 +26,8 @@ public class ConnectToCamera extends RosAppActivity {
 
     private Messenger messenger;
     private ImageListener listener;
+
+    private VirtualJoystickView virtualJoystickView;
 
     byte[] imageByteArray = new byte[921600];
 
@@ -63,33 +64,27 @@ public class ConnectToCamera extends RosAppActivity {
         }
     };
 
-    public ConnectToCamera() {
+    public ConnectToRobot() {
         super("android teleop", "android teleop");
-        System.out.println("Test");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setDashboardResource(R.id.top_bar);
-        setMainWindowResource(R.layout.activity_start_draw);
+        setMainWindowResource(R.layout.activity_connect_to_robot);
         super.onCreate(savedInstanceState);
 
-        Button undoButton = (Button) findViewById(R.id.btnundo);
-        Button activateButton = (Button) findViewById(R.id.btnactivate);
-        Button submitButton = (Button) findViewById(R.id.btnsubmit);
-        DrawView.setUndoButton(undoButton);
-        DrawView.setActivateButton(activateButton);
-        DrawView.setSubmitButton(submitButton);
+        virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
+        messenger = new Messenger(virtualJoystickView.getContext(), "cameraConnect");
+        listener = new ImageListener(virtualJoystickView.getContext(), "getImage", this);
 
-        imageView = (ImageView) findViewById(R.id.imageview);
-
-        listener = new ImageListener(imageView.getContext(), "getImage", this);
-
+        imageView = (ImageView) findViewById(R.id.image);
         displayImage();
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
         }
+        listener = new ImageListener(imageView.getContext(), "GetImage", this);
     }
 
     public void doSomethingWithImage(sensor_msgs.Image image)
@@ -117,8 +112,13 @@ public class ConnectToCamera extends RosAppActivity {
 
             String joyTopic = remaps.get("cmd_vel");
 
+            NameResolver appNameSpace = getMasterNameSpace();
+            joyTopic = appNameSpace.resolve(joyTopic).toString();
+            virtualJoystickView.setTopicName(joyTopic);
+
             nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/messenger"));
             nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
+            nodeMainExecutor.execute(virtualJoystickView, nodeConfiguration.setNodeName("android/virtual_joystick"));
         }
         catch (IOException e) {
             Log.d("tag", "Oh nooooooo");

@@ -39,7 +39,7 @@ public class ChooseAction extends AppCompatActivity {
     }
 
     public void connectToRobot() {
-        Intent intent = new Intent(this, ConnectToCamera.class);
+        Intent intent = new Intent(this, ConnectToRobot.class);
         String message = robotName.getText().toString();
         robotName.setText("");
         intent.putExtra("NameOfExtra", message);

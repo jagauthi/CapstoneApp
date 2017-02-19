@@ -22,7 +22,13 @@
         android:id="@+id/btnactivate"
         android:text="Stop Drawing" />
 
-    <com.example.androidapp.capstoneandroidapp.DrawView
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageview"
+        android:layout_below="@+id/btnactivate" />
+
+    <com.example.jagauthi.capstoneapp.DrawView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/drawview"
