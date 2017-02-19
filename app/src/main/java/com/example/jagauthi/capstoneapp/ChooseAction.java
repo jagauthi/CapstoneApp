@@ -20,20 +20,36 @@ public class ChooseAction extends AppCompatActivity {
         setContentView(R.layout.activity_choose_action);
 
         robotName = (EditText)findViewById(R.id.RobotName);
+        cameraName = (EditText)findViewById(R.id.CameraName);
+
+        connectRobot = (Button)findViewById(R.id.ConnectToRobot);
+        connectCamera = (Button)findViewById(R.id.ConnectToCamera);
+        connectRobot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToRobot();
+            }
+        });
+        connectCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToCamera();
+            }
+        });
     }
 
-    public void connectToRobot(View view) {
+    public void connectToRobot() {
         Intent intent = new Intent(this, ConnectToCamera.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
+        String message = robotName.getText().toString();
+        robotName.setText("");
         intent.putExtra("NameOfExtra", message);
         startActivity(intent);
     }
 
-    public void connectToRobot(View view) {
+    public void connectToCamera() {
         Intent intent = new Intent(this, ConnectToCamera.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String message = editText.getText().toString();
+        String message = cameraName.getText().toString();
+        cameraName.setText("");
         intent.putExtra("NameOfExtra", message);
         startActivity(intent);
     }
