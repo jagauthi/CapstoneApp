@@ -99,8 +99,8 @@ public class ConnectToRobot extends RosAppActivity {
 
         imageView = (ImageView) findViewById(R.id.image);
         rosImageView = (RosImageView) findViewById(R.id.rosimage);
-        rosImageView.setMessageType("sensor_msgs.Image");
-        rosImageView.setTopicName("getImage");
+        rosImageView.setMessageType("sensor_msgs.CompressedImage");
+        rosImageView.setTopicName("getCompressedImage");
         rosImageView.setMessageToBitmapCallable(new BitmapFromImage());
         displayImage();
         if(!imageView.postDelayed(updateImage, 100)){
