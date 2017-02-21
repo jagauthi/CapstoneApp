@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.ros.android.BitmapFromCompressedImage;
 import org.ros.android.view.VirtualJoystickView;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
@@ -31,6 +32,8 @@ public class ConnectToCamera extends RosAppActivity {
     byte[] imageByteArray = new byte[921600];
 
     boolean updateImageByte = true;
+
+    Bitmap whatWellDraw2;
 
     Runnable updateImage = new Runnable() {
         @Override
@@ -103,6 +106,12 @@ public class ConnectToCamera extends RosAppActivity {
             this.imageByteArray = Arrays.copyOfRange(byteArray, byteArray.length-921600, byteArray.length);
             Log.v("Image byte array size", Integer.toString(imageByteArray.length));
         }
+    }
+
+    public void doSomethingWithCompressedImage(sensor_msgs.CompressedImage image)
+    {
+        BitmapFromCompressedImage thing = new BitmapFromCompressedImage();
+        whatWellDraw2 = thing.call(image);
     }
 
     @Override

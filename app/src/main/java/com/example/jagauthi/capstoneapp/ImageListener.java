@@ -20,7 +20,6 @@ import org.ros.node.topic.Subscriber;
 public class ImageListener extends RelativeLayout implements NodeMain {
     private String topicName;
     Subscriber subscriber;
-    sensor_msgs.Image image;
     RosAppActivity main;
 
     public ImageListener(Context context, String topicName, RosAppActivity main) {
@@ -38,18 +37,19 @@ public class ImageListener extends RelativeLayout implements NodeMain {
     }
 
     public void onStart(ConnectedNode connectedNode) {
-        subscriber = connectedNode.newSubscriber(this.topicName, "sensor_msgs/Image");
+        //subscriber = connectedNode.newSubscriber(this.topicName, "sensor_msgs/Image");
+        subscriber = connectedNode.newSubscriber(this.topicName, "sensor_msgs/CompressedImage");
         subscriber.addMessageListener(new MessageListener() {
             @Override
             public void onNewMessage(Object o) {
-                image = (sensor_msgs.Image)o;
+                sensor_msgs.CompressedImage image = (sensor_msgs.CompressedImage)o;
                 if(main.getClass() == ConnectToRobot.class) {
                     ConnectToRobot connector = (ConnectToRobot)main;
-                    connector.doSomethingWithImage(image);
+                    connector.doSomethingWithCompressedImage(image);
                 }
                 else if(main.getClass() == ConnectToCamera.class) {
                     ConnectToCamera connector = (ConnectToCamera)main;
-                    connector.doSomethingWithImage(image);
+                    connector.doSomethingWithCompressedImage(image);
                 }
             }
         });

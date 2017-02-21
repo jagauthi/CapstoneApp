@@ -1,6 +1,7 @@
 package com.example.jagauthi.capstoneapp;
 
 import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,6 +11,9 @@ import android.widget.ImageView;
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 
 import org.jboss.netty.buffer.ChannelBuffer;
+import org.ros.android.BitmapFromCompressedImage;
+import org.ros.android.BitmapFromImage;
+import org.ros.android.view.RosImageView;
 import org.ros.android.view.VirtualJoystickView;
 import org.ros.namespace.NameResolver;
 import org.ros.node.NodeConfiguration;
@@ -21,8 +25,10 @@ import java.util.Arrays;
 public class ConnectToRobot extends RosAppActivity {
 
     sensor_msgs.Image image;
+    sensor_msgs.CompressedImage compressedImage;
 
     ImageView imageView;
+    RosImageView rosImageView;
 
     private Messenger messenger;
     private ImageListener listener;
@@ -32,6 +38,9 @@ public class ConnectToRobot extends RosAppActivity {
     byte[] imageByteArray = new byte[921600];
 
     boolean updateImageByte = true;
+
+    Bitmap whatWellDraw;
+    Bitmap whatWellDraw2;
 
     Runnable updateImage = new Runnable() {
         @Override
@@ -56,8 +65,17 @@ public class ConnectToRobot extends RosAppActivity {
                         buf[i] = pixelARGB;
                     }
                 }
-                Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.ARGB_8888);
-                imageView.setImageBitmap(image);
+                Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.RGB_565);
+
+                Bitmap image2 = Bitmap.createScaledBitmap(image, imageView.getWidth(), imageView.getHeight(), false);
+
+                if(whatWellDraw != null) {
+                    Log.d("asdf","asdf");
+                    imageView.setImageBitmap(whatWellDraw);
+                }
+                else
+                    imageView.setImageBitmap(image2);
+                //imageView.setImageBitmap(getResizedBitmap(image, imageView.getWidth(), imageView.getHeight()));
                 updateImageByte = true;
                 imageView.postDelayed(updateImage, 100);
             }
@@ -80,24 +98,61 @@ public class ConnectToRobot extends RosAppActivity {
         listener = new ImageListener(virtualJoystickView.getContext(), "getImage", this);
 
         imageView = (ImageView) findViewById(R.id.image);
+        rosImageView = (RosImageView) findViewById(R.id.rosimage);
+        rosImageView.setMessageType("sensor_msgs.Image");
+        rosImageView.setTopicName("getImage");
+        rosImageView.setMessageToBitmapCallable(new BitmapFromImage());
         displayImage();
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
         }
-        listener = new ImageListener(imageView.getContext(), "GetImage", this);
+    }
+
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 
     public void doSomethingWithImage(sensor_msgs.Image image)
     {
-        this.image = image;
+        //Log.d("whaaaat", "Wat");
+        //BitmapFromImage thing = new BitmapFromImage();
+        //whatWellDraw = thing.call(image);
+
         ChannelBuffer buffer = this.image.getData();
         byte[] byteArray = buffer.array();
-        Log.d("Tagggggggg", "Here's the byte array's first element: " + byteArray[41]);
-        Log.d("Tagggggggg", "Original array size: " + byteArray.length);
+
         if(updateImageByte) {
             this.imageByteArray = Arrays.copyOfRange(byteArray, byteArray.length-921600, byteArray.length);
-            Log.v("Image byte array size", Integer.toString(imageByteArray.length));
+            //Log.v("Image byte array size", Integer.toString(imageByteArray.length));
+            int red = 0;
+            if(imageByteArray[0] < 0)
+                red = 256 + imageByteArray[0];
+            else
+                red = imageByteArray[0];
+            Log.d("Tagggggggg", "Here's the byte array's first element: " + red);
+            Log.d("Tagggggggg", "Here's the byte array's first element: " + imageByteArray[1]);
+            Log.d("Tagggggggg", "Here's the byte array's first element: " + imageByteArray[2]);
+            Log.d("Tagggggggg", " ");
         }
+    }
+
+    public void doSomethingWithCompressedImage(sensor_msgs.CompressedImage image)
+    {
+        BitmapFromCompressedImage thing = new BitmapFromCompressedImage();
+        whatWellDraw2 = thing.call(image);
     }
 
     @Override
