@@ -25,7 +25,10 @@ public class DrawListener implements OnTouchListener {
         }
         else if(event.getAction() == 1)
         {
-            drawView.drawNewLine(endX, endY);
+            if(drawView.drawingPath)
+                drawView.drawNewLine(endX, endY);
+            else
+                drawView.drawNewCircle(endX, endY);
         }
         return true;
     }

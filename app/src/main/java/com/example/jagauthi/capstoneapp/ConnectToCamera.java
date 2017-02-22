@@ -58,7 +58,7 @@ public class ConnectToCamera extends RosAppActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         setDashboardResource(R.id.top_bar);
-        setMainWindowResource(R.layout.activity_start_draw);
+        setMainWindowResource(R.layout.activity_connect_to_camera);
         super.onCreate(savedInstanceState);
 
         Button undoButton = (Button) findViewById(R.id.btnundo);

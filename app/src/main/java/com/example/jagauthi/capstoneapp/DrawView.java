@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,9 +21,10 @@ public class DrawView extends View {
     Paint paint = new Paint();
     static Line defaultLine;
     static ArrayList<Line> lines;
+    static Point circlePoint;
     static Button undoButton, activateButton, submitButton;
-    static boolean drawing = true;
     static Context theContext;
+    static boolean drawingPath = false;
 
     public DrawView(Context context) {
         super(context);
@@ -42,10 +44,12 @@ public class DrawView extends View {
     private void init(Context context) {
         defaultLine = new Line(0, 1000, 200, 1000, 0.0);
         paint.setColor(Color.BLUE);
-        paint.setStrokeWidth(30f);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(20f);
 
         lines = new ArrayList<Line>();
         lines.add(defaultLine);
+        circlePoint = new Point(0, 0);
         setOnTouchListener(new DrawListener(this));
         setBackgroundColor(Color.GRAY);
         theContext = context;
@@ -86,27 +90,29 @@ public class DrawView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-        /* I think this will work, but I don't want to call it everytime I call onDraw.....
-        ////////////////////////////////////////
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        Bitmap mutableBitmap = bmp.copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(mutableBitmap); // now it should work ok
-        */
-        for(Line line : lines)
-        {
-            canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), paint);
+        if(drawingPath) {
+            for (Line line : lines) {
+                canvas.drawLine(line.getStartX(), line.getStartY(), line.getEndX(), line.getEndY(), paint);
+                invalidate();
+            }
+        }
+        else {
+            canvas.drawCircle(circlePoint.x, circlePoint.y, 40, paint);
             invalidate();
         }
     }
 
     public void drawNewLine(float endX, float endY)
     {
-        if(drawing) {
-            Line newLine = new Line(lines.get(lines.size() - 1).endX, lines.get(lines.size() - 1).endY, endX, endY, 0.0);
-            double angle = calculateAngle(lines.get(lines.size() - 1), newLine);
-            newLine.setStartAngle(angle);
-            lines.add(newLine);
-        }
+        Line newLine = new Line(lines.get(lines.size() - 1).endX, lines.get(lines.size() - 1).endY, endX, endY, 0.0);
+        double angle = calculateAngle(lines.get(lines.size() - 1), newLine);
+        newLine.setStartAngle(angle);
+        lines.add(newLine);
+    }
+
+    public void drawNewCircle(float endX, float endY)
+    {
+        circlePoint = new Point((int)endX, (int)endY);
     }
 
     public double calculateAngle(Line line1, Line line2)
@@ -138,14 +144,14 @@ public class DrawView extends View {
 
     public static void toggleDrawing()
     {
-        if(drawing) {
-            drawing = !drawing;
-            activateButton.setText("Start Drawing");
+        if(drawingPath) {
+            drawingPath = !drawingPath;
+            activateButton.setText("Drawing Goal");
         }
         else
         {
-            drawing = !drawing;
-            activateButton.setText("Stop Drawing");
+            drawingPath = !drawingPath;
+            activateButton.setText("Drawing Path");
         }
     }
 
@@ -160,7 +166,6 @@ public class DrawView extends View {
             }
             if(i != lines.size()-1)//if there is a line after this one
             {
-                System.out.println(lines.get(i+1).getStartAngle() < 0);
                 for(int turns = 0; turns < Math.abs(lines.get(i+1).getStartAngle() / 10); turns++)
                 {
                     if(lines.get(i+1).getStartAngle() < 0) //left turn

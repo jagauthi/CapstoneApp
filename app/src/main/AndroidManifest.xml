@@ -13,9 +13,8 @@
         android:screenOrientation="landscape"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".StartDraw" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ConnectToCamera"/>
+        <activity android:name=".ConnectToCamera"
+            android:screenOrientation="landscape"/>
         <activity android:name=".ConnectToRobot"
             android:screenOrientation="landscape"/>
         <activity
