@@ -24,9 +24,6 @@ import java.util.Arrays;
 
 public class ConnectToRobot extends RosAppActivity {
 
-    sensor_msgs.Image image;
-    sensor_msgs.CompressedImage compressedImage;
-
     ImageView imageView;
     RosImageView rosImageView;
 
@@ -75,7 +72,6 @@ public class ConnectToRobot extends RosAppActivity {
                 }
                 else
                     imageView.setImageBitmap(image2);
-                //imageView.setImageBitmap(getResizedBitmap(image, imageView.getWidth(), imageView.getHeight()));
                 updateImageByte = true;
                 imageView.postDelayed(updateImage, 100);
             }
@@ -102,36 +98,18 @@ public class ConnectToRobot extends RosAppActivity {
         rosImageView.setMessageType("sensor_msgs.CompressedImage");
         rosImageView.setTopicName("getCompressedImage");
         rosImageView.setMessageToBitmapCallable(new BitmapFromImage());
-        displayImage();
+        //displayImage();
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
         }
     }
 
-
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-        // CREATE A MATRIX FOR THE MANIPULATION
-        Matrix matrix = new Matrix();
-        // RESIZE THE BIT MAP
-        matrix.postScale(scaleWidth, scaleHeight);
-
-        // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
-        bm.recycle();
-        return resizedBitmap;
-    }
-
     public void doSomethingWithImage(sensor_msgs.Image image)
     {
-        //Log.d("whaaaat", "Wat");
         //BitmapFromImage thing = new BitmapFromImage();
         //whatWellDraw = thing.call(image);
 
-        ChannelBuffer buffer = this.image.getData();
+        ChannelBuffer buffer = image.getData();
         byte[] byteArray = buffer.array();
 
         if(updateImageByte) {
@@ -196,33 +174,5 @@ public class ConnectToRobot extends RosAppActivity {
                 break;
         }
         return true;
-    }
-
-    public void displayImage(){
-        if(imageByteArray != null) {
-            updateImageByte = false;
-            Log.v("GoToNext", Integer.toString(imageByteArray.length));
-
-            final int w = 640;
-            final int h = 480;
-            final int n = w * h;
-            int red, green, blue, pixelARGB;
-            final int [] buf = new int[n*3];
-            for (int y = 0; y < h; y++) {
-                final int yw = y * w;
-                for (int x = 0; x < w; x++) {
-                    int i = yw + x;
-                    // Calculate 'pixelARGB' here.
-                    red = imageByteArray[i++] & 0xFF;
-                    green = imageByteArray[i++] & 0xFF;
-                    blue = imageByteArray[i++]& 0xFF;
-                    pixelARGB = 0xFF000000 | (red << 16)| (green << 8) | blue;
-                    buf[i] = pixelARGB;
-                }
-            }
-            Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.ARGB_8888);
-            imageView.setImageBitmap(image);
-            updateImageByte = true;
-        }
     }
 }
