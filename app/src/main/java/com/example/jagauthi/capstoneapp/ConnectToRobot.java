@@ -1,6 +1,7 @@
 package com.example.jagauthi.capstoneapp;
 
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,7 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
+import com.google.common.base.Preconditions;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.ros.android.BitmapFromCompressedImage;
@@ -21,6 +23,8 @@ import org.ros.node.NodeMainExecutor;
 
 import java.io.IOException;
 import java.util.Arrays;
+
+import sensor_msgs.Image;
 
 public class ConnectToRobot extends RosAppActivity {
 
@@ -67,7 +71,6 @@ public class ConnectToRobot extends RosAppActivity {
                 Bitmap image2 = Bitmap.createScaledBitmap(image, imageView.getWidth(), imageView.getHeight(), false);
 
                 if(whatWellDraw != null) {
-                    Log.d("asdf","asdf");
                     imageView.setImageBitmap(whatWellDraw);
                 }
                 else
@@ -106,31 +109,42 @@ public class ConnectToRobot extends RosAppActivity {
 
     public void doSomethingWithImage(sensor_msgs.Image image)
     {
-        //BitmapFromImage thing = new BitmapFromImage();
-        //whatWellDraw = thing.call(image);
-
+        whatWellDraw = something(image);
+        /*
         ChannelBuffer buffer = image.getData();
         byte[] byteArray = buffer.array();
 
         if(updateImageByte) {
             this.imageByteArray = Arrays.copyOfRange(byteArray, byteArray.length-921600, byteArray.length);
             //Log.v("Image byte array size", Integer.toString(imageByteArray.length));
-            int red = 0;
-            if(imageByteArray[0] < 0)
-                red = 256 + imageByteArray[0];
-            else
-                red = imageByteArray[0];
-            Log.d("Tagggggggg", "Here's the byte array's first element: " + red);
-            Log.d("Tagggggggg", "Here's the byte array's first element: " + imageByteArray[1]);
-            Log.d("Tagggggggg", "Here's the byte array's first element: " + imageByteArray[2]);
-            Log.d("Tagggggggg", " ");
         }
+        */
     }
 
     public void doSomethingWithCompressedImage(sensor_msgs.CompressedImage image)
     {
         BitmapFromCompressedImage thing = new BitmapFromCompressedImage();
         whatWellDraw2 = thing.call(image);
+    }
+
+    public Bitmap something(Image message) {
+        long startTime = System.currentTimeMillis();
+        Log.d("DebuggingTag", "Start");
+        Preconditions.checkArgument(message.getEncoding().equals("rgb8"));
+        Bitmap bitmap = Bitmap.createBitmap(message.getWidth(), message.getHeight(), Bitmap.Config.ARGB_8888);
+
+        int step = message.getStep();
+        ChannelBuffer data = message.getData();
+        for(int x = 0; x < message.getWidth(); ++x) {
+            for(int y = 0; y < message.getHeight(); ++y) {
+                byte red = data.getByte(y * step + 3 * x);
+                byte green = data.getByte(y * step + 3 * x + 1);
+                byte blue = data.getByte(y * step + 3 * x + 2);
+                bitmap.setPixel(x, y, Color.rgb(red & 255, green & 255, blue & 255));
+            }
+        }
+        Log.d("DebuggingTag", "Time for last frame: " + (System.currentTimeMillis()-startTime));
+        return bitmap;
     }
 
     @Override
