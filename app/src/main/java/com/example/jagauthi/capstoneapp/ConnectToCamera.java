@@ -26,15 +26,9 @@ import sensor_msgs.Image;
 
 public class ConnectToCamera extends RosAppActivity {
 
-    sensor_msgs.Image image;
-
     ImageView imageView;
 
     private ImageListener listener;
-
-    byte[] imageByteArray = new byte[921600];
-
-    boolean updateImageByte = true;
 
     Bitmap whatWellDraw;
     Bitmap whatWellDraw2;
@@ -143,33 +137,5 @@ public class ConnectToCamera extends RosAppActivity {
                 break;
         }
         return true;
-    }
-
-    public void displayImage(){
-        if(imageByteArray != null) {
-            updateImageByte = false;
-            Log.v("GoToNext", Integer.toString(imageByteArray.length));
-
-            final int w = 640;
-            final int h = 480;
-            final int n = w * h;
-            int red, green, blue, pixelARGB;
-            final int [] buf = new int[n*3];
-            for (int y = 0; y < h; y++) {
-                final int yw = y * w;
-                for (int x = 0; x < w; x++) {
-                    int i = yw + x;
-                    // Calculate 'pixelARGB' here.
-                    red = imageByteArray[i++] & 0xFF;
-                    green = imageByteArray[i++] & 0xFF;
-                    blue = imageByteArray[i++]& 0xFF;
-                    pixelARGB = 0xFF000000 | (red << 16)| (green << 8) | blue;
-                    buf[i] = pixelARGB;
-                }
-            }
-            Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.ARGB_8888);
-            imageView.setImageBitmap(image);
-            updateImageByte = true;
-        }
     }
 }
