@@ -31,14 +31,9 @@ public class ConnectToRobot extends RosAppActivity {
     ImageView imageView;
     RosImageView rosImageView;
 
-    private Messenger messenger;
     private ImageListener listener;
 
     private VirtualJoystickView virtualJoystickView;
-
-    byte[] imageByteArray = new byte[921600];
-
-    boolean updateImageByte = true;
 
     Bitmap whatWellDraw;
     Bitmap whatWellDraw2;
@@ -46,38 +41,10 @@ public class ConnectToRobot extends RosAppActivity {
     Runnable updateImage = new Runnable() {
         @Override
         public void run() {
-            if(imageByteArray != null) {
-                updateImageByte = false;
-
-                final int w = 640;
-                final int h = 480;
-                final int n = w * h;
-                int red, green, blue, pixelARGB;
-                final int [] buf = new int[n*3];
-                for (int y = 0; y < h; y++) {
-                    final int yw = y * w;
-                    for (int x = 0; x < w; x++) {
-                        int i = yw + x;
-                        // Calculate 'pixelARGB' here.
-                        red = imageByteArray[i++] & 0xFF;
-                        green = imageByteArray[i++] & 0xFF;
-                        blue = imageByteArray[i++]& 0xFF;
-                        pixelARGB = 0xFF000000 | (red << 16)| (green << 8) | blue;
-                        buf[i] = pixelARGB;
-                    }
-                }
-                Bitmap image = Bitmap.createBitmap(buf, 640, 480, Bitmap.Config.RGB_565);
-
-                Bitmap image2 = Bitmap.createScaledBitmap(image, imageView.getWidth(), imageView.getHeight(), false);
-
-                if(whatWellDraw != null) {
-                    imageView.setImageBitmap(whatWellDraw);
-                }
-                else
-                    imageView.setImageBitmap(image2);
-                updateImageByte = true;
-                imageView.postDelayed(updateImage, 100);
+            if(whatWellDraw != null) {
+                imageView.setImageBitmap(whatWellDraw);
             }
+            imageView.postDelayed(updateImage, 100);
         }
     };
 
@@ -93,7 +60,6 @@ public class ConnectToRobot extends RosAppActivity {
         super.onCreate(savedInstanceState);
 
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
-        messenger = new Messenger(virtualJoystickView.getContext(), "cameraConnect");
         listener = new ImageListener(virtualJoystickView.getContext(), "getImage", this);
 
         imageView = (ImageView) findViewById(R.id.image);
@@ -101,7 +67,6 @@ public class ConnectToRobot extends RosAppActivity {
         rosImageView.setMessageType("sensor_msgs.CompressedImage");
         rosImageView.setTopicName("getCompressedImage");
         rosImageView.setMessageToBitmapCallable(new BitmapFromImage());
-        //displayImage();
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
         }
@@ -109,16 +74,7 @@ public class ConnectToRobot extends RosAppActivity {
 
     public void doSomethingWithImage(sensor_msgs.Image image)
     {
-        whatWellDraw = something(image);
-        /*
-        ChannelBuffer buffer = image.getData();
-        byte[] byteArray = buffer.array();
-
-        if(updateImageByte) {
-            this.imageByteArray = Arrays.copyOfRange(byteArray, byteArray.length-921600, byteArray.length);
-            //Log.v("Image byte array size", Integer.toString(imageByteArray.length));
-        }
-        */
+        whatWellDraw = convertImageToBitmap(image);
     }
 
     public void doSomethingWithCompressedImage(sensor_msgs.CompressedImage image)
@@ -127,7 +83,7 @@ public class ConnectToRobot extends RosAppActivity {
         whatWellDraw2 = thing.call(image);
     }
 
-    public Bitmap something(Image message) {
+    public Bitmap convertImageToBitmap(Image message) {
         long startTime = System.currentTimeMillis();
         Log.d("DebuggingTag", "Start");
         Preconditions.checkArgument(message.getEncoding().equals("rgb8"));
@@ -163,7 +119,6 @@ public class ConnectToRobot extends RosAppActivity {
             joyTopic = appNameSpace.resolve(joyTopic).toString();
             virtualJoystickView.setTopicName(joyTopic);
 
-            nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/messenger"));
             nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
             nodeMainExecutor.execute(virtualJoystickView, nodeConfiguration.setNodeName("android/virtual_joystick"));
         }
