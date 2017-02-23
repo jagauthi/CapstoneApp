@@ -29,6 +29,7 @@ public class ConnectToCamera extends RosAppActivity {
     ImageView imageView;
 
     private ImageListener listener;
+    private Messenger messenger;
 
     Bitmap whatWellDraw;
     Bitmap whatWellDraw2;
@@ -60,11 +61,12 @@ public class ConnectToCamera extends RosAppActivity {
         Button submitButton = (Button) findViewById(R.id.btnsubmit);
         DrawView.setUndoButton(undoButton);
         DrawView.setActivateButton(activateButton);
-        DrawView.setSubmitButton(submitButton);
+        DrawView.setSubmitButton(submitButton, this);
 
         imageView = (ImageView) findViewById(R.id.imageview);
 
         listener = new ImageListener(imageView.getContext(), "getImage", this);
+        messenger = new Messenger(imageView.getContext(), "sendGoal");
 
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
@@ -84,7 +86,7 @@ public class ConnectToCamera extends RosAppActivity {
 
     public Bitmap convertImageToBitmap(Image message) {
         long startTime = System.currentTimeMillis();
-        Log.d("DebuggingTag", "Start");
+        //Log.d("DebuggingTag", "Start");
         Preconditions.checkArgument(message.getEncoding().equals("rgb8"));
         Bitmap bitmap = Bitmap.createBitmap(message.getWidth(), message.getHeight(), Bitmap.Config.ARGB_8888);
 
@@ -98,8 +100,14 @@ public class ConnectToCamera extends RosAppActivity {
                 bitmap.setPixel(x, y, Color.rgb(red & 255, green & 255, blue & 255));
             }
         }
-        Log.d("DebuggingTag", "Time for last frame: " + (System.currentTimeMillis()-startTime));
+        //Log.d("DebuggingTag", "Time for last frame: " + (System.currentTimeMillis()-startTime));
         return bitmap;
+    }
+
+    public void sendMessage(int x, int y)
+    {
+        messenger.setMessage("" + x + " " + y);
+        messenger.setSending(true);
     }
 
     @Override
@@ -112,9 +120,8 @@ public class ConnectToCamera extends RosAppActivity {
             socket.close();
             NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(local_network_address.getHostAddress(), getMasterUri());
 
-            String joyTopic = remaps.get("cmd_vel");
-
             nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
+            nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/mesenger"));
         }
         catch (IOException e) {
             Log.d("tag", "Oh nooooooo");

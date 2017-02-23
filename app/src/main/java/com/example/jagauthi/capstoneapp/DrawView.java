@@ -18,6 +18,7 @@ import static java.lang.Math.acos;
 
 public class DrawView extends View {
 
+    static ConnectToCamera connectToCamera;
     Paint paint = new Paint();
     static Line defaultLine;
     static ArrayList<Line> lines;
@@ -25,6 +26,7 @@ public class DrawView extends View {
     static Button undoButton, activateButton, submitButton;
     static Context theContext;
     static boolean drawingPath = false;
+    static int goalX, goalY;
 
     public DrawView(Context context) {
         super(context);
@@ -77,8 +79,9 @@ public class DrawView extends View {
         });
     }
 
-    public static void setSubmitButton(Button button)
+    public static void setSubmitButton(Button button, ConnectToCamera ctc)
     {
+        connectToCamera = ctc;
         submitButton = button;
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,6 +116,13 @@ public class DrawView extends View {
     public void drawNewCircle(float endX, float endY)
     {
         circlePoint = new Point((int)endX, (int)endY);
+        double xRatio = endX/this.getWidth();
+        double yRatio = endY/this.getHeight();
+
+        goalX = (int)(xRatio*640);
+        goalY = (int)(yRatio*480);
+        Log.d("DrawView", "Goal x: " + goalX);
+        Log.d("DrawView", "Goal y: " + goalY);
     }
 
     public double calculateAngle(Line line1, Line line2)
@@ -157,6 +167,8 @@ public class DrawView extends View {
 
     public static void getPathAsString()
     {
+        connectToCamera.sendMessage(goalX, goalY);
+        /*
         String path = "1\\n"; //First character is ignored
         for(int i = 0; i < lines.size(); i++)
         {
@@ -179,5 +191,6 @@ public class DrawView extends View {
         lines.add(defaultLine);
         path += "5";
         System.out.println("Heres the path...\n" + path);
+        */
     }
 }
