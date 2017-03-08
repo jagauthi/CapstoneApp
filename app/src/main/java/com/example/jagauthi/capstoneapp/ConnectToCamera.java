@@ -67,17 +67,17 @@ public class ConnectToCamera extends RosAppActivity {
         setMainWindowResource(R.layout.activity_connect_to_camera);
         super.onCreate(savedInstanceState);
 
-        Button undoButton = (Button) findViewById(R.id.btnundo);
-        Button activateButton = (Button) findViewById(R.id.btnactivate);
-        Button submitButton = (Button) findViewById(R.id.btnsubmit);
-
         imageView = (ImageView) findViewById(R.id.imageview);
         drawView = (DrawView) findViewById(R.id.drawview);
         loadingText = (TextView) findViewById(R.id.loadingText);
 
+        Button submitButton = (Button) findViewById(R.id.btnsubmit);
+        //Button undoButton = (Button) findViewById(R.id.btnundo);
+        //Button activateButton = (Button) findViewById(R.id.btnactivate);
+
         drawView.setSubmitButton(submitButton, this);
-        drawView.setUndoButton(undoButton);
-        drawView.setActivateButton(activateButton);
+        //drawView.setUndoButton(undoButton);
+        //drawView.setActivateButton(activateButton);
 
         listener = new ImageListener(imageView.getContext(), "getImage", this);
         messenger = new Messenger(imageView.getContext(), "sendGoal");
