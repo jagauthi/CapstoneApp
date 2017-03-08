@@ -27,6 +27,18 @@
             android:layout_margin="20dip"
             android:layout_toLeftOf="@+id/btnactivate"/>
 
+        <TextView
+            android:id="@+id/loadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/imageview"
+            android:layout_alignRight="@+id/imageview"
+            android:layout_alignTop="@+id/imageview"
+            android:layout_alignBottom="@+id/imageview"
+            android:gravity="center"
+            android:text="Loading image..."
+            android:textColor="#ffffff"/>
+
         <Button
             android:layout_width="120dp"
             android:layout_height="70dp"

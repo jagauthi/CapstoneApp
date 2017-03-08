@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
 import com.google.common.base.Preconditions;
@@ -29,6 +31,7 @@ public class ConnectToCamera extends RosAppActivity {
 
     ImageView imageView;
     DrawView drawView;
+    TextView loadingText;
 
     private ImageListener listener;
     private Messenger messenger;
@@ -41,6 +44,7 @@ public class ConnectToCamera extends RosAppActivity {
         public void run() {
             if(whatWellDraw != null) {
                 imageView.setImageBitmap(whatWellDraw);
+                loadingText.setVisibility(View.INVISIBLE);
             }
             imageView.postDelayed(updateImage, 100);
 
@@ -69,6 +73,7 @@ public class ConnectToCamera extends RosAppActivity {
 
         imageView = (ImageView) findViewById(R.id.imageview);
         drawView = (DrawView) findViewById(R.id.drawview);
+        loadingText = (TextView) findViewById(R.id.loadingText);
 
         drawView.setSubmitButton(submitButton, this);
         drawView.setUndoButton(undoButton);
