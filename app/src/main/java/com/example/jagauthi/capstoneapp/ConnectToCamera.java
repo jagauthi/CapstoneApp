@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -64,6 +65,10 @@ public class ConnectToCamera extends RosAppActivity {
         DrawView.setSubmitButton(submitButton, this);
 
         imageView = (ImageView) findViewById(R.id.imageview);
+
+        ViewGroup.LayoutParams params = imageView.getLayoutParams();
+        params.width = (int)(params.height*1.33333);
+        imageView.setLayoutParams(params);
 
         listener = new ImageListener(imageView.getContext(), "getImage", this);
         messenger = new Messenger(imageView.getContext(), "sendGoal");
