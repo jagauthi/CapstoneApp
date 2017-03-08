@@ -13,15 +13,15 @@
         android:orientation="vertical">
 
         <com.example.jagauthi.capstoneapp.DrawView
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:id="@+id/drawview"
             android:layout_margin="20dip"
             android:layout_toLeftOf="@+id/btnactivate"/>
 
         <ImageView
-            android:layout_width="1536px"
-            android:layout_height="1152px"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:id="@+id/imageview"
             android:alpha=".5"
             android:layout_margin="20dip"

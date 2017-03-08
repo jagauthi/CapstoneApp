@@ -28,6 +28,7 @@ import sensor_msgs.Image;
 public class ConnectToCamera extends RosAppActivity {
 
     ImageView imageView;
+    DrawView drawView;
 
     private ImageListener listener;
     private Messenger messenger;
@@ -42,6 +43,11 @@ public class ConnectToCamera extends RosAppActivity {
                 imageView.setImageBitmap(whatWellDraw);
             }
             imageView.postDelayed(updateImage, 100);
+
+            ViewGroup.LayoutParams params = imageView.getLayoutParams();
+            params.width = (int)(params.height*1.33333);
+            imageView.setLayoutParams(params);
+            drawView.setLayoutParams(params);
         }
     };
 
@@ -60,15 +66,13 @@ public class ConnectToCamera extends RosAppActivity {
         Button undoButton = (Button) findViewById(R.id.btnundo);
         Button activateButton = (Button) findViewById(R.id.btnactivate);
         Button submitButton = (Button) findViewById(R.id.btnsubmit);
-        DrawView.setUndoButton(undoButton);
-        DrawView.setActivateButton(activateButton);
-        DrawView.setSubmitButton(submitButton, this);
 
         imageView = (ImageView) findViewById(R.id.imageview);
+        drawView = (DrawView) findViewById(R.id.drawview);
 
-        ViewGroup.LayoutParams params = imageView.getLayoutParams();
-        params.width = (int)(params.height*1.33333);
-        imageView.setLayoutParams(params);
+        drawView.setSubmitButton(submitButton, this);
+        drawView.setUndoButton(undoButton);
+        drawView.setActivateButton(activateButton);
 
         listener = new ImageListener(imageView.getContext(), "getImage", this);
         messenger = new Messenger(imageView.getContext(), "sendGoal");
@@ -91,7 +95,7 @@ public class ConnectToCamera extends RosAppActivity {
 
     public Bitmap convertImageToBitmap(Image message) {
         long startTime = System.currentTimeMillis();
-        //Log.d("DebuggingTag", "Start");
+        //Log.d("DebuggingTag", "Start processing image");
         Preconditions.checkArgument(message.getEncoding().equals("rgb8"));
         Bitmap bitmap = Bitmap.createBitmap(message.getWidth(), message.getHeight(), Bitmap.Config.ARGB_8888);
 

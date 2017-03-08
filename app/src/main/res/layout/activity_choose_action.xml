@@ -16,85 +16,33 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="#ff404040"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <LinearLayout
-            android:id="@+id/robot_layout"
-            android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/ConnectToRobot"
             android:layout_height="wrap_content"
-            android:background="#ff404040"
-            android:orientation="horizontal" >
-
-            <RelativeLayout
-                android:id="@+id/rel1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#ff404040"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/RobotName"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_toLeftOf="@+id/ConnectToRobot"
-                    android:layout_alignTop="@+id/ConnectToRobot"
-                    android:layout_alignBottom="@+id/ConnectToRobot"
-                    android:background="#fff"
-                    android:hint="Robot name"
-                    />
-
-                <Button
-                    android:id="@+id/ConnectToRobot"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="#44b"
-                    android:text="RobotConnect"
-                    />
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/camera_layout"
             android:layout_width="fill_parent"
+            android:padding="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:background="#44b"
+            android:text="Robot Connect"
+            android:textColor="#ffffff"
+            />
+
+        <Button
+            android:id="@+id/ConnectToCamera"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#ff404040"
-            android:orientation="horizontal" >
-
-            <RelativeLayout
-                android:id="@+id/rel2"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#ff404040"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:id="@+id/CameraName"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_toLeftOf="@+id/ConnectToCamera"
-                    android:layout_alignTop="@+id/ConnectToCamera"
-                    android:layout_alignBottom="@+id/ConnectToCamera"
-                    android:background="#fff"
-                    android:hint="Camera name"
-                    />
-
-                <Button
-                    android:id="@+id/ConnectToCamera"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="8dp"
-                    android:background="#44b"
-                    android:text="CameraConnect"
-                    />
-            </RelativeLayout>
-        </LinearLayout>
+            android:layout_width="fill_parent"
+            android:padding="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="20dp"
+            android:background="#44b"
+            android:text="Camera Connect"
+            android:textColor="#ffffff"
+            />
     </LinearLayout>
 </RelativeLayout>
