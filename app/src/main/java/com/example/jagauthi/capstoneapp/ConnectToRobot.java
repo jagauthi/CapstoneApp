@@ -28,6 +28,8 @@ import sensor_msgs.Image;
 
 public class ConnectToRobot extends RosAppActivity {
 
+    String robotName;
+
     ImageView imageView;
     RosImageView rosImageView;
 
@@ -59,8 +61,10 @@ public class ConnectToRobot extends RosAppActivity {
         setMainWindowResource(R.layout.activity_connect_to_robot);
         super.onCreate(savedInstanceState);
 
+        robotName = getIntent().getExtras().getString("robotName");
+
         virtualJoystickView = (VirtualJoystickView) findViewById(R.id.virtual_joystick);
-        listener = new ImageListener(virtualJoystickView.getContext(), "getImage", this);
+        listener = new ImageListener(virtualJoystickView.getContext(), robotName + "Image", this);
 
         imageView = (ImageView) findViewById(R.id.image);
         rosImageView = (RosImageView) findViewById(R.id.rosimage);

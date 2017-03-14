@@ -29,6 +29,8 @@ import sensor_msgs.Image;
 
 public class ConnectToCamera extends RosAppActivity {
 
+    String cameraName;
+
     ImageView imageView;
     DrawView drawView;
     TextView loadingText;
@@ -67,6 +69,8 @@ public class ConnectToCamera extends RosAppActivity {
         setMainWindowResource(R.layout.activity_connect_to_camera);
         super.onCreate(savedInstanceState);
 
+        cameraName = getIntent().getExtras().getString("cameraName");
+
         imageView = (ImageView) findViewById(R.id.imageview);
         drawView = (DrawView) findViewById(R.id.drawview);
         loadingText = (TextView) findViewById(R.id.loadingText);
@@ -79,7 +83,7 @@ public class ConnectToCamera extends RosAppActivity {
         //drawView.setUndoButton(undoButton);
         //drawView.setActivateButton(activateButton);
 
-        listener = new ImageListener(imageView.getContext(), "getImage", this);
+        listener = new ImageListener(imageView.getContext(), cameraName + "Image", this);
         messenger = new Messenger(imageView.getContext(), "sendGoal");
 
         if(!imageView.postDelayed(updateImage, 100)){

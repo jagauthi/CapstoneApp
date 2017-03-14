@@ -9,6 +9,8 @@ import android.widget.EditText;
 
 public class ChooseAction extends AppCompatActivity {
 
+    EditText robotName;
+    EditText cameraName;
     Button connectRobot;
     Button connectCamera;
 
@@ -16,6 +18,9 @@ public class ChooseAction extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_action);
+
+        robotName = (EditText)findViewById(R.id.RobotName);
+        cameraName = (EditText)findViewById(R.id.CameraName);
 
         connectRobot = (Button)findViewById(R.id.ConnectToRobot);
         connectCamera = (Button)findViewById(R.id.ConnectToCamera);
@@ -35,11 +40,17 @@ public class ChooseAction extends AppCompatActivity {
 
     public void connectToRobot() {
         Intent intent = new Intent(this, ConnectToRobot.class);
+        String message = robotName.getText().toString();
+        robotName.setText("");
+        intent.putExtra("robotName", message);
         startActivity(intent);
     }
 
     public void connectToCamera() {
         Intent intent = new Intent(this, ConnectToCamera.class);
+        String message = cameraName.getText().toString();
+        cameraName.setText("");
+        intent.putExtra("cameraName", message);
         startActivity(intent);
     }
 }
