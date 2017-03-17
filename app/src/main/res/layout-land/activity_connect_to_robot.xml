@@ -15,18 +15,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <Button
-            android:id="@+id/GoToNextButton"
-            android:layout_height="50dip"
-            android:layout_width="80dip"
-            android:textSize="15sp"
-            android:onClick="GoToNext"
-            android:background="#44b"
-            android:layout_margin="10dip"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"/>
-
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,11 +43,11 @@
             android:layout_height="150dip"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:layout_marginRight="20dp"
-            android:layout_marginBottom="40dp"
+            android:layout_margin="20dp"
             android:layout_alignBottom="@+id/image"
-            android:layout_alignRight="@+id/GoToNextButton"
-            android:layout_alignEnd="@+id/GoToNextButton">
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true">
         </org.ros.android.view.VirtualJoystickView>
 
 
