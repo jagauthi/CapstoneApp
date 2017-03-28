@@ -9,48 +9,118 @@ import android.widget.EditText;
 
 public class ChooseAction extends AppCompatActivity {
 
-    EditText robotName;
-    EditText cameraName;
-    Button connectRobot;
-    Button connectCamera;
+    Button leftRobot1, leftRobot2, leftRobot3, leftRobot4;
+    Button rightCamera1, rightCamera2, rightCamera3, rightCamera4;
+    Button rightRobot1, rightRobot2, rightRobot3, rightRobot4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_action);
 
-        robotName = (EditText)findViewById(R.id.RobotName);
-        cameraName = (EditText)findViewById(R.id.CameraName);
-
-        connectRobot = (Button)findViewById(R.id.ConnectToRobot);
-        connectCamera = (Button)findViewById(R.id.ConnectToCamera);
-        connectRobot.setOnClickListener(new View.OnClickListener() {
+        leftRobot1 = (Button)findViewById(R.id.leftRobot1);
+        leftRobot1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectToRobot();
+                connectToAvailableRobot("rob1");
             }
         });
-        connectCamera.setOnClickListener(new View.OnClickListener() {
+        leftRobot2 = (Button)findViewById(R.id.leftRobot2);
+        leftRobot2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectToCamera();
+                connectToAvailableRobot("rob2");
+            }
+        });
+        leftRobot3 = (Button)findViewById(R.id.leftRobot3);
+        leftRobot3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToAvailableRobot("rob3");
+            }
+        });
+        leftRobot4 = (Button)findViewById(R.id.leftRobot4);
+        leftRobot4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToAvailableRobot("rob4");
+            }
+        });
+
+        rightCamera1 = (Button)findViewById(R.id.rightCamera1);
+        rightCamera1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToCamera("cama1");
+            }
+        });
+        rightCamera2 = (Button)findViewById(R.id.rightCamera2);
+        rightCamera2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToCamera("cama2");
+            }
+        });
+        rightCamera3 = (Button)findViewById(R.id.rightCamera3);
+        rightCamera3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToCamera("camb1");
+            }
+        });
+        rightCamera4 = (Button)findViewById(R.id.rightCamera4);
+        rightCamera4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToCamera("camb2");
+            }
+        });
+
+        rightRobot1 = (Button)findViewById(R.id.rightRobot1);
+        rightRobot1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToUnavailableRobot("rob1");
+            }
+        });
+        rightRobot2 = (Button)findViewById(R.id.rightRobot2);
+        rightRobot2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToUnavailableRobot("rob2");
+            }
+        });
+        rightRobot3 = (Button)findViewById(R.id.rightRobot3);
+        rightRobot3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToUnavailableRobot("rob3");
+            }
+        });
+        rightRobot4 = (Button)findViewById(R.id.rightRobot4);
+        rightRobot4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                connectToUnavailableRobot("rob4");
             }
         });
     }
 
-    public void connectToRobot() {
+    public void connectToAvailableRobot(String robotName) {
         Intent intent = new Intent(this, ConnectToRobot.class);
-        String message = robotName.getText().toString();
-        robotName.setText("");
-        intent.putExtra("robotName", message);
+        intent.putExtra("robotName", robotName);
         startActivity(intent);
     }
 
-    public void connectToCamera() {
+    public void connectToCamera(String cameraName) {
         Intent intent = new Intent(this, ConnectToCamera.class);
-        String message = cameraName.getText().toString();
-        cameraName.setText("");
-        intent.putExtra("cameraName", message);
+        intent.putExtra("cameraName", cameraName);
+        startActivity(intent);
+    }
+
+    public void connectToUnavailableRobot(String robotName) {
+        Intent intent = new Intent(this, ConnectToRobot.class);
+        intent.putExtra("robotName", robotName);
         startActivity(intent);
     }
 }
