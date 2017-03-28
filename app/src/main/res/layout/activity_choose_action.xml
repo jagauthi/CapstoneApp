@@ -9,92 +9,205 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="#ff404040"
+    android:orientation="horizontal"
     tools:context="com.example.jagauthi.capstoneapp.ChooseAction">
 
-    <LinearLayout
-        android:id="@+id/main_layout"
-        android:layout_width="fill_parent"
+    <RelativeLayout
+        android:id="@+id/leftLayout"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:background="#ff404040"
-        android:orientation="vertical" >
+        android:background="#040"
+        android:layout_alignParentLeft="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Connect to Robot"
+            android:textSize="15dp"
+            android:textColor="#fff"/>
 
         <LinearLayout
-            android:id="@+id/robot_layout"
-            android:layout_width="fill_parent"
+            android:id="@+id/linearLayout1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#ff404040"
-            android:orientation="horizontal" >
+            android:layout_margin="10dp"
+            android:background="#222"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true" >
 
-            <RelativeLayout
-                android:id="@+id/rel1"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#ff404040"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/leftRobot1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="leftRobot1"
+                />
 
-                <EditText
-                    android:id="@+id/RobotName"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_toLeftOf="@+id/ConnectToRobot"
-                    android:layout_alignTop="@+id/ConnectToRobot"
-                    android:layout_alignBottom="@+id/ConnectToRobot"
-                    android:background="#fff"
-                    android:hint="Robot name"
-                    />
+            <Button
+                android:id="@+id/leftRobot2"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="leftRobot2"
+                />
 
-                <Button
-                    android:id="@+id/ConnectToRobot"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="10dp"
-                    android:background="#44b"
-                    android:text="RobotConnect"
-                    />
-            </RelativeLayout>
+            <Button
+                android:id="@+id/leftRobot3"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="leftRobot3"
+                />
+
+            <Button
+                android:id="@+id/leftRobot4"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="leftRobot4"
+                />
         </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/middleLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="#040"
+        android:layout_toLeftOf="@id/rightLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Connect to Camera"
+            android:textSize="15dp"
+            android:textColor="#fff"/>
 
         <LinearLayout
-            android:id="@+id/camera_layout"
-            android:layout_width="fill_parent"
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="#ff404040"
-            android:orientation="horizontal" >
+            android:layout_margin="10dp"
+            android:layout_alignParentBottom="true"
+            android:background="#222"
+            android:orientation="vertical" >
 
-            <RelativeLayout
-                android:id="@+id/rel2"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#ff404040"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/rightCamera1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightCamera1"
+                />
 
-                <EditText
-                    android:id="@+id/CameraName"
-                    android:layout_height="wrap_content"
-                    android:layout_width="fill_parent"
-                    android:layout_toLeftOf="@+id/ConnectToCamera"
-                    android:layout_alignTop="@+id/ConnectToCamera"
-                    android:layout_alignBottom="@+id/ConnectToCamera"
-                    android:background="#fff"
-                    android:hint="Camera name"
-                    />
+            <Button
+                android:id="@+id/rightCamera2"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightCamera2"
+                />
 
-                <Button
-                    android:id="@+id/ConnectToCamera"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="8dp"
-                    android:background="#44b"
-                    android:text="CameraConnect"
-                    />
-            </RelativeLayout>
+            <Button
+                android:id="@+id/rightCamera3"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightCamera3"
+                />
+
+            <Button
+                android:id="@+id/rightCamera4"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightCamera4"
+                />
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rightLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:background="#400"
+        android:layout_alignParentRight="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_alignLeft="@+id/linearLayout3"
+            android:text="Busy Robots"
+            android:textSize="15dp"
+            android:textColor="#fff"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_alignParentBottom="true"
+            android:background="#222"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/rightRobot1"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightRobot1"
+                />
+
+            <Button
+                android:id="@+id/rightRobot2"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightRobot2"
+                />
+
+            <Button
+                android:id="@+id/rightRobot3"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightRobot3"
+                />
+
+            <Button
+                android:id="@+id/rightRobot4"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_margin="5dp"
+                android:padding="10dp"
+                android:background="#44b"
+                android:text="rightRobot4"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
