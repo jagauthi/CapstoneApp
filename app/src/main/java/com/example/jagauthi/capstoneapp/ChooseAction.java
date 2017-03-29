@@ -9,9 +9,9 @@ import android.widget.EditText;
 
 public class ChooseAction extends AppCompatActivity {
 
-    Button leftRobot1, leftRobot2, leftRobot3, leftRobot4;
+    Button leftRobot1, leftRobot2;
     Button rightCamera1, rightCamera2, rightCamera3, rightCamera4;
-    Button rightRobot1, rightRobot2, rightRobot3, rightRobot4;
+    Button rightRobot1, rightRobot2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +30,6 @@ public class ChooseAction extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 connectToAvailableRobot("rob2");
-            }
-        });
-        leftRobot3 = (Button)findViewById(R.id.leftRobot3);
-        leftRobot3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectToAvailableRobot("rob3");
-            }
-        });
-        leftRobot4 = (Button)findViewById(R.id.leftRobot4);
-        leftRobot4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectToAvailableRobot("rob4");
             }
         });
 
@@ -88,20 +74,6 @@ public class ChooseAction extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 connectToUnavailableRobot("rob2");
-            }
-        });
-        rightRobot3 = (Button)findViewById(R.id.rightRobot3);
-        rightRobot3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectToUnavailableRobot("rob3");
-            }
-        });
-        rightRobot4 = (Button)findViewById(R.id.rightRobot4);
-        rightRobot4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                connectToUnavailableRobot("rob4");
             }
         });
     }
