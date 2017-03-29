@@ -13,10 +13,15 @@
         android:screenOrientation="landscape"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".ConnectToCamera"
-            android:screenOrientation="landscape"/>
-        <activity android:name=".ConnectToRobot"
-            android:screenOrientation="landscape"/>
+        <activity
+            android:name=".CameraGridActivity"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ConnectToCamera"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".ConnectToRobot"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".ChooseAction"
             android:screenOrientation="landscape">
@@ -33,8 +38,6 @@
                 <action android:name="org.ros.android.NodeMainExecutorService" />
             </intent-filter>
         </service>
-
-
     </application>
 
 </manifest>
