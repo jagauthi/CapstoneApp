@@ -79,7 +79,7 @@ public class ChooseAction extends AppCompatActivity {
     }
 
     public void connectToAvailableRobot(String robotName) {
-        Intent intent = new Intent(this, ConnectToRobot.class);
+        Intent intent = new Intent(this, CameraGridActivity.class);
         intent.putExtra("robotName", robotName);
         startActivity(intent);
     }
