@@ -29,7 +29,7 @@ import sensor_msgs.Image;
 
 public class ConnectToCamera extends RosAppActivity {
 
-    String cameraName;
+    String cameraName, robotName, startPosition, goalPosition;
 
     ImageView imageView;
     DrawView drawView;
@@ -69,7 +69,10 @@ public class ConnectToCamera extends RosAppActivity {
         setMainWindowResource(R.layout.activity_connect_to_camera);
         super.onCreate(savedInstanceState);
 
-        cameraName = getIntent().getExtras().getString("cameraName");
+        robotName = getIntent().getExtras().getString("robotName");
+        startPosition = getIntent().getExtras().getString("startPosition");
+        goalPosition = getIntent().getExtras().getString("goalPosition");
+        cameraName = getIntent().getExtras().getString("goalPosition"); //The goal should be the one we want to connect to I believe
 
         imageView = (ImageView) findViewById(R.id.imageview);
         drawView = (DrawView) findViewById(R.id.drawview);

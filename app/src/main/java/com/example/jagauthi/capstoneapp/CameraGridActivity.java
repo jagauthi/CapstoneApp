@@ -14,7 +14,8 @@ public class CameraGridActivity extends AppCompatActivity {
     Button undoButton, submitButton;
     TextView sourceText, goalText;
 
-    String startPosition, endPosition;
+    String robotName;
+    String startPosition, goalPosition;
     int pickStage;
 
     @Override
@@ -22,9 +23,10 @@ public class CameraGridActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_grid);
 
+        robotName = getIntent().getExtras().getString("robotName");
         pickStage = 1;
         startPosition = "";
-        endPosition = "";
+        goalPosition = "";
 
         sourceText = (TextView)findViewById(R.id.sourceText);
         goalText = (TextView)findViewById(R.id.goalText);
@@ -150,7 +152,7 @@ public class CameraGridActivity extends AppCompatActivity {
         }
         else if(pickStage == 2) {
             if (buttonName.equals("cama1") || buttonName.equals("cama2") || buttonName.equals("camb1") || buttonName.equals("camb2")) {
-                endPosition = buttonName;
+                goalPosition = buttonName;
                 pickStage = 3;
                 goalText.setText("Goal: " + buttonName);
             }
@@ -175,8 +177,9 @@ public class CameraGridActivity extends AppCompatActivity {
         sourceText.setText("Source:");
         goalText.setText("Goal:");
         Intent intent = new Intent(this, ConnectToCamera.class);
+        intent.putExtra("robotName", robotName);
         intent.putExtra("startPosition", startPosition);
-        intent.putExtra("endPosition", endPosition);
+        intent.putExtra("goalPosition", goalPosition);
         startActivity(intent);
     }
 }
