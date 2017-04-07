@@ -86,7 +86,9 @@ public class ChooseAction extends AppCompatActivity {
 
     public void connectToCamera(String cameraName) {
         Intent intent = new Intent(this, ConnectToCamera.class);
-        intent.putExtra("cameraName", cameraName);
+        intent.putExtra("robotName", "None");
+        intent.putExtra("startPosition", "cameraName");
+        intent.putExtra("goalPosition", "cameraName");
         startActivity(intent);
     }
 

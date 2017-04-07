@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class CameraGridActivity extends AppCompatActivity {
 
     Button cama1, cama2, camb1, camb2;
-    Button a, b, c, d, e, f, g, h;
+    Button c, d, e, f, g, h, i, j;
     Button undoButton, submitButton;
     TextView sourceText, goalText;
 
@@ -31,23 +31,7 @@ public class CameraGridActivity extends AppCompatActivity {
         sourceText = (TextView)findViewById(R.id.sourceText);
         goalText = (TextView)findViewById(R.id.goalText);
 
-        a = (Button)findViewById(R.id.button2);
-        a.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseButton("a");
-            }
-        });
-
-        b = (Button)findViewById(R.id.button3);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseButton("b");
-            }
-        });
-
-        c = (Button)findViewById(R.id.button5);
+        c = (Button)findViewById(R.id.button2);
         c.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +39,7 @@ public class CameraGridActivity extends AppCompatActivity {
             }
         });
 
-        d = (Button)findViewById(R.id.button8);
+        d = (Button)findViewById(R.id.button3);
         d.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,7 +47,7 @@ public class CameraGridActivity extends AppCompatActivity {
             }
         });
 
-        e = (Button)findViewById(R.id.button9);
+        e = (Button)findViewById(R.id.button5);
         e.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +55,7 @@ public class CameraGridActivity extends AppCompatActivity {
             }
         });
 
-        f = (Button)findViewById(R.id.button12);
+        f = (Button)findViewById(R.id.button8);
         f.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,7 +63,7 @@ public class CameraGridActivity extends AppCompatActivity {
             }
         });
 
-        g = (Button)findViewById(R.id.button14);
+        g = (Button)findViewById(R.id.button9);
         g.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,11 +71,27 @@ public class CameraGridActivity extends AppCompatActivity {
             }
         });
 
-        h = (Button)findViewById(R.id.button15);
+        h = (Button)findViewById(R.id.button12);
         h.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 chooseButton("h");
+            }
+        });
+
+        i = (Button)findViewById(R.id.button14);
+        i.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseButton("i");
+            }
+        });
+
+        j = (Button)findViewById(R.id.button15);
+        j.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseButton("j");
             }
         });
 

@@ -72,7 +72,7 @@ public class ConnectToCamera extends RosAppActivity {
         robotName = getIntent().getExtras().getString("robotName");
         startPosition = getIntent().getExtras().getString("startPosition");
         goalPosition = getIntent().getExtras().getString("goalPosition");
-        cameraName = getIntent().getExtras().getString("goalPosition"); //The goal should be the one we want to connect to I believe
+        cameraName = getIntent().getExtras().getString("startPosition");
 
         imageView = (ImageView) findViewById(R.id.imageview);
         drawView = (DrawView) findViewById(R.id.drawview);
@@ -86,8 +86,18 @@ public class ConnectToCamera extends RosAppActivity {
         //drawView.setUndoButton(undoButton);
         //drawView.setActivateButton(activateButton);
 
-        listener = new ImageListener(imageView.getContext(), cameraName + "Image", this);
-        messenger = new Messenger(imageView.getContext(), "sendGoal");
+        String sendingToCamera = cameraName;
+        if(cameraName.equals("c") || cameraName.equals("e"))
+            sendingToCamera = "cama1";
+        else if(cameraName.equals("d") || cameraName.equals("f"))
+            sendingToCamera = "camb1";
+        else if(cameraName.equals("g") || cameraName.equals("i"))
+            sendingToCamera = "cama2";
+        else if(cameraName.equals("h") || cameraName.equals("j"))
+            sendingToCamera = "camb2";
+
+        listener = new ImageListener(imageView.getContext(), cameraName + "getImage", this);
+        messenger = new Messenger(imageView.getContext(), "AppTo" + sendingToCamera);
 
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
@@ -127,7 +137,7 @@ public class ConnectToCamera extends RosAppActivity {
 
     public void sendMessage(int x, int y)
     {
-        messenger.setMessage("" + x + " " + y);
+        messenger.setMessage(goalPosition + " " + x + " " + y);
         messenger.setSending(true);
     }
 

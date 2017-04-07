@@ -68,7 +68,7 @@
             android:layout_toRightOf="@id/button1"
             android:padding="10dp"
             android:background="#44b"
-            android:text="A"
+            android:text="c"
             />
 
         <Button
@@ -79,7 +79,7 @@
             android:layout_toRightOf="@id/button2"
             android:padding="10dp"
             android:background="#44b"
-            android:text="B"
+            android:text="d"
             />
 
         <Button
@@ -101,7 +101,7 @@
             android:layout_below="@id/button1"
             android:padding="10dp"
             android:background="#44b"
-            android:text="C"
+            android:text="e"
             />
 
         <Button
@@ -137,7 +137,7 @@
             android:layout_below="@id/button1"
             android:padding="10dp"
             android:background="#44b"
-            android:text="D"
+            android:text="f"
             />
 
         <Button
@@ -148,7 +148,7 @@
             android:layout_below="@id/button5"
             android:padding="10dp"
             android:background="#44b"
-            android:text="E"
+            android:text="g"
             />
 
         <Button
@@ -184,7 +184,7 @@
             android:layout_below="@id/button5"
             android:padding="10dp"
             android:background="#44b"
-            android:text="F"
+            android:text="h"
             />
 
         <Button
@@ -207,7 +207,7 @@
             android:layout_below="@id/button9"
             android:padding="10dp"
             android:background="#44b"
-            android:text="G"
+            android:text="i"
             />
 
         <Button
@@ -219,7 +219,7 @@
             android:layout_below="@id/button9"
             android:padding="10dp"
             android:background="#44b"
-            android:text="H"
+            android:text="j"
             />
 
         <Button
