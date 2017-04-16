@@ -3,23 +3,39 @@ package com.example.jagauthi.capstoneapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class CameraGridActivity extends AppCompatActivity {
+import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
+
+import org.ros.node.NodeConfiguration;
+import org.ros.node.NodeMainExecutor;
+
+import java.io.IOException;
+
+public class CameraGridActivity extends RosAppActivity {
 
     Button cama1, cama2, camb1, camb2;
     Button c, d, e, f, g, h, i, j;
     Button undoButton, submitButton;
     TextView sourceText, goalText;
 
+    private ImageListener listener;
+    private Messenger messenger;
+
     String robotName;
     String startPosition, goalPosition;
     int pickStage;
+    boolean waitingForStartPositions, receivedStartPositions;
+
+    public CameraGridActivity() {
+        super("android teleop", "android teleop");
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera_grid);
 
@@ -27,6 +43,8 @@ public class CameraGridActivity extends AppCompatActivity {
         pickStage = 1;
         startPosition = "";
         goalPosition = "";
+        waitingForStartPositions = false;
+        receivedStartPositions = false;
 
         sourceText = (TextView)findViewById(R.id.sourceText);
         goalText = (TextView)findViewById(R.id.goalText);
@@ -142,6 +160,11 @@ public class CameraGridActivity extends AppCompatActivity {
                 submit();
             }
         });
+
+        /*
+        listener = new ImageListener(cama1.getContext(), cameraName + "getImage", this);
+        messenger = new Messenger(cama1.getContext(), "AppTo" + sendingToCamera);
+        */
     }
 
     public void chooseButton(String buttonName) {
@@ -157,7 +180,6 @@ public class CameraGridActivity extends AppCompatActivity {
                 goalText.setText("Goal: " + buttonName);
             }
         }
-
     }
 
     public void undo() {
@@ -173,13 +195,82 @@ public class CameraGridActivity extends AppCompatActivity {
     }
 
     public void submit() {
-        pickStage = 1;
-        sourceText.setText("Source:");
-        goalText.setText("Goal:");
-        Intent intent = new Intent(this, ConnectToCamera.class);
-        intent.putExtra("robotName", robotName);
-        intent.putExtra("startPosition", startPosition);
-        intent.putExtra("goalPosition", goalPosition);
-        startActivity(intent);
+        if(pickStage == 2) {
+            String source = sourceText.getText().toString();
+            if(source.equals("c")) {
+                messenger.setMessage("GET START LOCATIONS cama1 NORTH");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("e")) {
+                messenger.setMessage("GET START LOCATIONS cama1 WEST");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("d")) {
+                messenger.setMessage("GET START LOCATIONS camb1 NORTH");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("f")) {
+                messenger.setMessage("GET START LOCATIONS camb1 EAST");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("g")) {
+                messenger.setMessage("GET START LOCATIONS cama2 WEST");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("i")) {
+                messenger.setMessage("GET START LOCATIONS cama2 SOUTH");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("h")) {
+                messenger.setMessage("GET START LOCATIONS camb2 EAST");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("j")) {
+                messenger.setMessage("GET START LOCATIONS camb2 SOUTH");
+                messenger.setSending(true);
+                waitingForStartPositions = true;
+            }
+            else if(source.equals("cama1") || source.equals("cama2") ||
+                    source.equals("camb1") || source.equals("camb2")){
+                //Do something? Like skip the steps for getting start positions and
+                //start being able to pick the goal location?
+            }
+        }
+        else if(pickStage == 3) {
+            pickStage = 1;
+            sourceText.setText("Source:");
+            goalText.setText("Goal:");
+            Intent intent = new Intent(this, ConnectToCamera.class);
+            intent.putExtra("robotName", robotName);
+            intent.putExtra("startPosition", startPosition);
+            intent.putExtra("goalPosition", goalPosition);
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    protected void init(NodeMainExecutor nodeMainExecutor) {
+        super.init(nodeMainExecutor);
+
+        try {
+            java.net.Socket socket = new java.net.Socket(getMasterUri().getHost(), getMasterUri().getPort());
+            java.net.InetAddress local_network_address = socket.getLocalAddress();
+            socket.close();
+            NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(local_network_address.getHostAddress(), getMasterUri());
+
+            nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
+            nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/mesenger"));
+        }
+        catch (IOException e) {
+            Log.d("tag", "Oh nooooooo");
+            e.printStackTrace();
+        }
     }
 }
