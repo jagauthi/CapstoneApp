@@ -234,4 +234,17 @@
             android:text=""
             />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/receivingBackground"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#000"
+        android:visibility="invisible"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+    </LinearLayout>
+
 </RelativeLayout>

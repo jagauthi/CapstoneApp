@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.rosjava.android_remocons.common_tools.apps.RosAppActivity;
@@ -21,6 +22,7 @@ public class CameraGridActivity extends RosAppActivity {
     Button c, d, e, f, g, h, i, j;
     Button undoButton, submitButton;
     TextView sourceText, goalText;
+    LinearLayout receivingBackground;
 
     private StringListener listenerFromCama1;
     private StringListener listenerFromCama2;
@@ -54,6 +56,7 @@ public class CameraGridActivity extends RosAppActivity {
 
         sourceText = (TextView)findViewById(R.id.sourceText);
         goalText = (TextView)findViewById(R.id.goalText);
+        receivingBackground = (LinearLayout)findViewById(R.id.receivingBackground);
 
         c = (Button)findViewById(R.id.button2);
         c.setOnClickListener(new View.OnClickListener() {
@@ -178,8 +181,24 @@ public class CameraGridActivity extends RosAppActivity {
 
     }
 
-    public void doSomethingWithMessage(std_msgs.String string) {
+    public void doSomethingWithMessage(std_msgs.String message) {
         //Going to receive multiple messages of the form "x,y"
+        String[] newString = message.toString().split(",");
+        final int x = Integer.parseInt(newString[0]);
+        final int y = Integer.parseInt(newString[1]);
+        Button newButton = new Button(cama1.getContext());
+        newButton.setText("" + x + ", " + y);
+        newButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pickStartLocation(x, y);
+            }
+        });
+        receivingBackground.addView(newButton);
+    }
+
+    public void pickStartLocation(int x, int y) {
+        //Remember to turn receiving background off or clear it or something
     }
 
     public void chooseButton(String buttonName) {
@@ -216,41 +235,49 @@ public class CameraGridActivity extends RosAppActivity {
                 messengerToCama1.setMessage("north");
                 messengerToCama1.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("e")) {
                 messengerToCama1.setMessage("west");
                 messengerToCama1.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("d")) {
                 messengerToCamb1.setMessage("north");
                 messengerToCamb1.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("f")) {
                 messengerToCamb1.setMessage("east");
                 messengerToCamb1.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("g")) {
                 messengerToCama2.setMessage("west");
                 messengerToCama2.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("i")) {
                 messengerToCama2.setMessage("south");
                 messengerToCama2.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("h")) {
                 messengerToCamb2.setMessage("east");
                 messengerToCamb2.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("j")) {
                 messengerToCamb2.setMessage("south");
                 messengerToCamb2.setSending(true);
                 waitingForStartPositions = true;
+                receivingBackground.setVisibility(View.VISIBLE);
             }
             else if(source.equals("cama1") || source.equals("cama2") ||
                     source.equals("camb1") || source.equals("camb2")){
