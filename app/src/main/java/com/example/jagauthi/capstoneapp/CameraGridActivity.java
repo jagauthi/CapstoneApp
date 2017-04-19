@@ -22,8 +22,14 @@ public class CameraGridActivity extends RosAppActivity {
     Button undoButton, submitButton;
     TextView sourceText, goalText;
 
-    private ImageListener listener;
-    private Messenger messenger;
+    private StringListener listenerFromCama1;
+    private StringListener listenerFromCama2;
+    private StringListener listenerFromCamb1;
+    private StringListener listenerFromCamb2;
+    private Messenger messengerToCama1;
+    private Messenger messengerToCama2;
+    private Messenger messengerToCamb1;
+    private Messenger messengerToCamb2;
 
     String robotName;
     String startPosition, goalPosition;
@@ -161,10 +167,19 @@ public class CameraGridActivity extends RosAppActivity {
             }
         });
 
-        /*
-        listener = new ImageListener(cama1.getContext(), cameraName + "getImage", this);
-        messenger = new Messenger(cama1.getContext(), "AppTo" + sendingToCamera);
-        */
+        listenerFromCama1 = new StringListener(cama1.getContext(), "cama1ToAppValidStart", this);
+        listenerFromCama2 = new StringListener(cama1.getContext(), "cama2ToAppValidStart", this);
+        listenerFromCamb1 = new StringListener(cama1.getContext(), "camb1ToAppValidStart", this);
+        listenerFromCamb2 = new StringListener(cama1.getContext(), "camb2ToAppValidStart", this);
+        messengerToCama1 = new Messenger(cama1.getContext(), "AppReqVStartscama1");
+        messengerToCama2 = new Messenger(cama1.getContext(), "AppReqVStartscama2");
+        messengerToCamb1 = new Messenger(cama1.getContext(), "AppReqVStartscamb1");
+        messengerToCamb2 = new Messenger(cama1.getContext(), "AppReqVStartscamb2");
+
+    }
+
+    public void doSomethingWithMessage(std_msgs.String string) {
+        //Going to receive multiple messages of the form "x,y"
     }
 
     public void chooseButton(String buttonName) {
@@ -198,43 +213,43 @@ public class CameraGridActivity extends RosAppActivity {
         if(pickStage == 2) {
             String source = sourceText.getText().toString();
             if(source.equals("c")) {
-                messenger.setMessage("GET START LOCATIONS cama1 NORTH");
-                messenger.setSending(true);
+                messengerToCama1.setMessage("north");
+                messengerToCama1.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("e")) {
-                messenger.setMessage("GET START LOCATIONS cama1 WEST");
-                messenger.setSending(true);
+                messengerToCama1.setMessage("west");
+                messengerToCama1.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("d")) {
-                messenger.setMessage("GET START LOCATIONS camb1 NORTH");
-                messenger.setSending(true);
+                messengerToCamb1.setMessage("north");
+                messengerToCamb1.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("f")) {
-                messenger.setMessage("GET START LOCATIONS camb1 EAST");
-                messenger.setSending(true);
+                messengerToCamb1.setMessage("east");
+                messengerToCamb1.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("g")) {
-                messenger.setMessage("GET START LOCATIONS cama2 WEST");
-                messenger.setSending(true);
+                messengerToCama2.setMessage("west");
+                messengerToCama2.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("i")) {
-                messenger.setMessage("GET START LOCATIONS cama2 SOUTH");
-                messenger.setSending(true);
+                messengerToCama2.setMessage("south");
+                messengerToCama2.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("h")) {
-                messenger.setMessage("GET START LOCATIONS camb2 EAST");
-                messenger.setSending(true);
+                messengerToCamb2.setMessage("east");
+                messengerToCamb2.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("j")) {
-                messenger.setMessage("GET START LOCATIONS camb2 SOUTH");
-                messenger.setSending(true);
+                messengerToCamb2.setMessage("south");
+                messengerToCamb2.setSending(true);
                 waitingForStartPositions = true;
             }
             else if(source.equals("cama1") || source.equals("cama2") ||
@@ -265,8 +280,14 @@ public class CameraGridActivity extends RosAppActivity {
             socket.close();
             NodeConfiguration nodeConfiguration = NodeConfiguration.newPublic(local_network_address.getHostAddress(), getMasterUri());
 
-            nodeMainExecutor.execute(listener, nodeConfiguration.setNodeName("android/imageListener"));
-            nodeMainExecutor.execute(messenger, nodeConfiguration.setNodeName("android/mesenger"));
+            nodeMainExecutor.execute(listenerFromCama1, nodeConfiguration.setNodeName("android/listenerFromCama1"));
+            nodeMainExecutor.execute(listenerFromCama2, nodeConfiguration.setNodeName("android/listenerFromCama2"));
+            nodeMainExecutor.execute(listenerFromCamb1, nodeConfiguration.setNodeName("android/listenerFromCamb1"));
+            nodeMainExecutor.execute(listenerFromCamb2, nodeConfiguration.setNodeName("android/listenerFromCamb2"));
+            nodeMainExecutor.execute(messengerToCama1, nodeConfiguration.setNodeName("android/messengerToCama1"));
+            nodeMainExecutor.execute(messengerToCama2, nodeConfiguration.setNodeName("android/messengerToCama2"));
+            nodeMainExecutor.execute(messengerToCamb1, nodeConfiguration.setNodeName("android/messengerToCamb1"));
+            nodeMainExecutor.execute(messengerToCamb2, nodeConfiguration.setNodeName("android/messengerToCamb2"));
         }
         catch (IOException e) {
             Log.d("tag", "Oh nooooooo");
