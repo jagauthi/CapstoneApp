@@ -84,7 +84,7 @@ public class ConnectToCamera extends RosAppActivity {
         //drawView.setActivateButton(activateButton);
 
         listener = new ImageListener(imageView.getContext(), cameraName + "Image", this);
-        messenger = new Messenger(imageView.getContext(), "sendGoal");
+        messenger = new Messenger(imageView.getContext(), cameraName + "sendGoal");
 
         if(!imageView.postDelayed(updateImage, 100)){
             Log.v("Nope", "Nope");
